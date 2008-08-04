@@ -21,6 +21,8 @@ require 'net/http'
 require 'rexml/document'
 include REXML
 
+# MUST NOT end with a trailing slash, as this string is interpolated like this:
+# "#{API_URL}/user.services"
 API_URL = 'http://api.ping.fm/v1'
 
 class Pingfm
@@ -32,9 +34,9 @@ class Pingfm
 
 	# Validates API key and user APP key
 	# if successful returns:
-	# {'status' => 'OK'}
+	#   {'status' => 'OK'}
 	# if unsuccessful returns:
-	# {'status' => 'FAIL', 'message' => 'message what went wrong'}
+	#   {'status' => 'FAIL', 'message' => 'message what went wrong'}
 	def validate
 	  response = get_response('user.validate')
 		if response.elements['rsp'].attributes['status'] == 'OK'
@@ -46,9 +48,9 @@ class Pingfm
 
 	# Returns a list of services the user has set up through Ping.fm
 	# if successful returns:
-	# {'status' => 'OK', services = [{'id' => 'serviceid', 'name' => 'servicename', 'methods' => 'status,blog'}, ...]}
+	#   {'status' => 'OK', services = [{'id' => 'serviceid', 'name' => 'servicename', 'methods' => 'status,blog'}, ...]}
 	# if unsuccessful returns:
-	# {'status' => 'FAIL', 'message' => 'message what went wrong'}
+	#   {'status' => 'FAIL', 'message' => 'message what went wrong'}
 	def services
 	  response = get_response('user.services')
 		if response.elements['rsp'].attributes['status'] == 'OK'
@@ -65,9 +67,9 @@ class Pingfm
 
 	# Returns a user's custom triggers
 	# if successful returns:
-	# {'status' => 'OK', triggers = [{'id' => 'triggerid', 'method' => 'triggermethod', 'services' => [{'id' => 'serviceid', 'name' => 'servicename'}, ...]}, ...]}
+	#   {'status' => 'OK', triggers = [{'id' => 'triggerid', 'method' => 'triggermethod', 'services' => [{'id' => 'serviceid', 'name' => 'servicename'}, ...]}, ...]}
 	# if unsuccessful returns:
-	# {'status' => 'FAIL', 'message' => 'message what went wrong'}
+	#   {'status' => 'FAIL', 'message' => 'message what went wrong'}
 	def triggers
 	  response = get_response('user.triggers')
 		if response.elements['rsp'].attributes['status'] == 'OK'
@@ -86,14 +88,14 @@ class Pingfm
 		end
 	end
 
-	# Returns the last #{limit} messages a user has posted through Ping.fm
+	# Returns the last <tt>limit</tt> messages a user has posted through Ping.fm
 	# Optional arguments:
 	# limit = limit the results returned, default is 25
 	# order = which direction to order the returned results by date, default is DESC (descending)
 	# if successful returns:
-	# {'status' => 'OK', 'messages' => [{'id' => 'messageid', 'method' => 'messsagemethod', 'rfc' => 'date', 'unix' => 'date', 'title' => 'messagetitle', 'body' => 'messagebody', 'services' => [{'id' => 'serviceid', 'name' => 'servicename'}, ...]}, ...]}
+	#   {'status' => 'OK', 'messages' => [{'id' => 'messageid', 'method' => 'messsagemethod', 'rfc' => 'date', 'unix' => 'date', 'title' => 'messagetitle', 'body' => 'messagebody', 'services' => [{'id' => 'serviceid', 'name' => 'servicename'}, ...]}, ...]}
 	# if unsuccessful returns:
-	# {'status' => 'FAIL', 'message' => 'message what went wrong'}
+	#   {'status' => 'FAIL', 'message' => 'message what went wrong'}
 	def latest(limit = 25, order = 'DESC')
 	  response = get_response('user.latest', 'limit' => limit, 'order' => order)
 		if response.elements['rsp'].attributes['status'] == 'OK'
@@ -132,9 +134,9 @@ class Pingfm
 	# service = a single service to post to
 	# debug = set debug to 1 to avoid posting test data
 	# if successful returns:
-	# {'status' => 'OK'}
+	#   {'status' => 'OK'}
 	# if unsuccessful returns:
-	# {'status' => 'FAIL', 'message' => 'message what went wrong'}
+	#   {'status' => 'FAIL', 'message' => 'message what went wrong'}
 	def post(body, title = '', post_method = 'default', service = '', debug = 0)
 	  response = get_response('user.post',
 	                          'body' => body, 'title' => title,
@@ -155,9 +157,9 @@ class Pingfm
 	# title = title of the posted message, title is required for 'blog' post method
 	# debug = set debug to 1 to avoid posting test data
 	# if successful returns:
-	# {'status' => 'OK'}
+	#   {'status' => 'OK'}
 	# if unsuccessful returns:
-	# {'status' => 'FAIL', 'message' => 'message what went wrong'}
+	#   {'status' => 'FAIL', 'message' => 'message what went wrong'}
 	def tpost(body, trigger, title = '', debug = 0)
 	  response = get_response('user.tpost',
 	                          'body' => body, 'title' => title,
@@ -171,20 +173,27 @@ class Pingfm
 
 	private
 
+  # Gets a particular ping.fm response.
+  # <tt>type</tt>: The service type (ex. 'user.services'). Gets appended to <tt>API_URL</tt>.
+  # <tt>parameters</tt>: Optional (depending on the <tt>type</tt>) parameters to be passed along
+  # with the request.  The API key and user app key are merged with this on every call.
   def get_response(type, parameters = {})
     parameters.merge!('api_key' => @api_key, 'user_app_key' => @user_app_key)
 		Document.new(http_request("#{API_URL}/#{type}", parameters))
   end
 
+  # This makes the actual HTTP request.
 	def http_request(url, parameters)
 		response = Net::HTTP.post_form(URI.parse(url), parameters)
 		return response.body
 	end
 
+  # Successful response.
 	def status_ok
 		return {'status' => 'OK'}
 	end
 
+  # Failed response.
 	def status_fail(response)
 		return {'status' => 'FAIL', 'message' => response.elements['rsp/message'].text}
 	end
