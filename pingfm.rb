@@ -21,6 +21,8 @@ require 'net/http'
 require 'rexml/document'
 include REXML
 
+API_URL = 'http://api.ping.fm/v1'
+
 class Pingfm
 
 	def initialize(api_key, user_app_key)
@@ -33,10 +35,10 @@ class Pingfm
 	# {'status' => 'OK'}
 	# if unsuccessful returns:
 	# {'status' => 'FAIL', 'message' => 'message what went wrong'}
-	def validate()
-		response = Document.new(http_request('http://api.ping.fm/v1/user.validate', {'api_key' => @api_key, 'user_app_key' => @user_app_key}))
+	def validate
+	  response = get_response('user.validate')
 		if response.elements['rsp'].attributes['status'] == 'OK'
-			return status_ok()
+			return status_ok
 		else
 			return status_fail(response)
 		end
@@ -47,8 +49,8 @@ class Pingfm
 	# {'status' => 'OK', services = [{'id' => 'serviceid', 'name' => 'servicename', 'methods' => 'status,blog'}, ...]}
 	# if unsuccessful returns:
 	# {'status' => 'FAIL', 'message' => 'message what went wrong'}
-	def services()
-		response = Document.new(http_request('http://api.ping.fm/v1/user.services', {'api_key' => @api_key, 'user_app_key' => @user_app_key}))
+	def services
+	  response = get_response('user.services')
 		if response.elements['rsp'].attributes['status'] == 'OK'
 			services = status_ok()
 			services['services'] = []
@@ -66,10 +68,10 @@ class Pingfm
 	# {'status' => 'OK', triggers = [{'id' => 'triggerid', 'method' => 'triggermethod', 'services' => [{'id' => 'serviceid', 'name' => 'servicename'}, ...]}, ...]}
 	# if unsuccessful returns:
 	# {'status' => 'FAIL', 'message' => 'message what went wrong'}
-	def triggers()
-		response = Document.new(http_request('http://api.ping.fm/v1/user.triggers', {'api_key' => @api_key, 'user_app_key' => @user_app_key}))
+	def triggers
+	  response = get_response('user.triggers')
 		if response.elements['rsp'].attributes['status'] == 'OK'
-			triggers = status_ok()
+			triggers = status_ok
 			triggers['triggers'] = []
 			response.elements.each('rsp/triggers/trigger') do |trigger|
 				triggers['triggers'].push({'id' => trigger.attributes['id'], 'method' => trigger.attributes['method'], 'services' => []})
@@ -93,9 +95,9 @@ class Pingfm
 	# if unsuccessful returns:
 	# {'status' => 'FAIL', 'message' => 'message what went wrong'}
 	def latest(limit = 25, order = 'DESC')
-		response = Document.new(http_request('http://api.ping.fm/v1/user.latest', {'api_key' => @api_key, 'user_app_key' => @user_app_key, 'limit' => limit, 'order' => order}))
+	  response = get_response('user.latest', 'limit' => limit, 'order' => order)
 		if response.elements['rsp'].attributes['status'] == 'OK'
-			latest = status_ok()
+			latest = status_ok
 			latest['messages'] = []
 			response.elements.each('rsp/messages/message') do |message|
 				latest['messages'].push({})
@@ -134,9 +136,12 @@ class Pingfm
 	# if unsuccessful returns:
 	# {'status' => 'FAIL', 'message' => 'message what went wrong'}
 	def post(body, title = '', post_method = 'default', service = '', debug = 0)
-		response = Document.new(http_request('http://api.ping.fm/v1/user.post', {'api_key' => @api_key, 'user_app_key' => @user_app_key, 'body' => body, 'title' => title, 'post_method' => post_method, 'service' => service, 'debug' => debug}))
+	  response = get_response('user.post',
+	                          'body' => body, 'title' => title,
+	                          'post_method' => post_method, 'service' => service,
+	                          'debug' => debug)
 		if response.elements['rsp'].attributes['status'] == 'OK'
-			return status_ok()
+			return status_ok
 		else
 			return status_fail(response)
 		end
@@ -154,9 +159,11 @@ class Pingfm
 	# if unsuccessful returns:
 	# {'status' => 'FAIL', 'message' => 'message what went wrong'}
 	def tpost(body, trigger, title = '', debug = 0)
-		response = Document.new(http_request('http://api.ping.fm/v1/user.tpost', {'api_key' => @api_key, 'user_app_key' => @user_app_key, 'body' => body, 'trigger' => trigger, 'title' => title, 'debug' => debug}))
+	  response = get_response('user.tpost',
+	                          'body' => body, 'title' => title,
+	                          'trigger' => trigger, 'debug' => debug)
 		if response.elements['rsp'].attributes['status'] == 'OK'
-			return status_ok()
+			return status_ok
 		else
 			return status_fail(response)
 		end
@@ -164,12 +171,17 @@ class Pingfm
 
 	private
 
+  def get_response(type, parameters = {})
+    parameters.merge!('api_key' => @api_key, 'user_app_key' => @user_app_key)
+		Document.new(http_request("#{API_URL}/#{type}", parameters))
+  end
+
 	def http_request(url, parameters)
 		response = Net::HTTP.post_form(URI.parse(url), parameters)
 		return response.body
 	end
 
-	def status_ok()
+	def status_ok
 		return {'status' => 'OK'}
 	end
 
