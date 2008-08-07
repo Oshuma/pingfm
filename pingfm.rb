@@ -1,7 +1,6 @@
 # Ping.fm Ruby Class
 require 'net/http'
 require 'rexml/document'
-include REXML
 
 # MUST NOT end with a trailing slash, as this string is interpolated like this:
 # "#{API_URL}/user.services"
@@ -161,7 +160,7 @@ class Pingfm
   # with the request.  The API key and user app key are merged with this on every call.
   def get_response(type, parameters = {})
     parameters.merge!('api_key' => @api_key, 'user_app_key' => @user_app_key)
-		Document.new(http_request("#{API_URL}/#{type}", parameters))
+		REXML::Document.new(http_request("#{API_URL}/#{type}", parameters))
   end
 
   # This makes the actual HTTP request.
