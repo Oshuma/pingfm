@@ -1,0 +1,54 @@
+Ping.fm Ruby Library
+--------------------
+
+Ping.fm (http://ping.fm) is a simple service that makes updating your social networks a snap...
+
+...and this it's Ruby library.
+
+
+Code
+----
+http://github.com/Oshuma/pingfm/
+
+
+Authors
+-------
+Krunoslav Husak (http://h00s.net)
+Dale Campbell (http://corrupt.save-state.net)
+
+
+Usage
+-----
+Check the source comments for more details.
+
+  # Require the lib and initialize it.
+  require 'pingfm'
+  pingfm = Pingfm.new('api_key', 'user_app_key')
+
+  # Ensure proper API and User App keys.
+  pingfm.validate['status']
+  # => 'OK' if success, otherwise 'FAIL'
+
+  # Grab latest 5 posts.
+  pingfm.latest(5)  # => {'messages' => [...]}
+
+  # Posting to all services.
+  pingfm.post('The Dark Knight was amazing.')
+  # => {'status' => 'OK'} if success, otherwise 'FAIL'
+
+  # Post using custom user trigger; must be defined on the Ping.fm site.
+  pingfm.tpost('The message here.', '#something_custom', 'Optional Title')
+  # => {'status' => 'OK'} if success, otherwise 'FAIL'
+
+
+Legal Fluff
+-----------
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.

@@ -1,22 +1,4 @@
 # Ping.fm Ruby Class
-# Version:   1.0.1
-# Author:    Dale Campbell <dale@save-state.net>
-#
-# Copyright (C) 2008. Dale Campbell, http://corrupt.save-state.net/
-#
-# Originally written by Krunoslav Husak, http://h00s.net
-# Found here: http://h00s.net/site/ruby/pingfm-ruby-class/
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-
 require 'net/http'
 require 'rexml/document'
 include REXML
