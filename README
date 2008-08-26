@@ -1,54 +1,76 @@
-Ping.fm Ruby Library
---------------------
+pingfm
+    by:
+    * Krunoslav Husak (http://h00s.net)
+    * Dale Campbell (http://corrupt.save-state.net)
+    * Kevin Williams (http://almostserio.us)
+    http://github.com/kevwil/pingfm/
 
-Ping.fm (http://ping.fm) is a simple service that makes updating your social networks a snap...
+== DESCRIPTION:
 
-...and this it's Ruby library.
+Ping fm (http://ping.fm) is a simple service that makes updating your social networks a snap, and this it's Ruby library.
 
+== FEATURES/PROBLEMS:
 
-Code
-----
-http://github.com/Oshuma/pingfm/
+* need tests!
+* would be great to only have to specify keys once, perhaps some user profile yaml file
 
+== SYNOPSIS:
 
-Authors
--------
-Krunoslav Husak (http://h00s.net)
-Dale Campbell (http://corrupt.save-state.net)
+  Check the source comments for more details.
 
+    # Require the lib and initialize it.
+    require 'pingfm'
+    pingfm = Pingfm::Client.new('api_key', 'user_app_key')
 
-Usage
------
-Check the source comments for more details.
+    # Ensure proper API and User App keys.
+    pingfm.validate['status']
+    # => 'OK' if success, otherwise 'FAIL'
 
-  # Require the lib and initialize it.
-  require 'pingfm'
-  pingfm = Pingfm.new('api_key', 'user_app_key')
+    # Grab latest 5 posts.
+    pingfm.latest(5)  # => {'messages' => [...]}
 
-  # Ensure proper API and User App keys.
-  pingfm.validate['status']
-  # => 'OK' if success, otherwise 'FAIL'
+    # Posting to all services.
+    pingfm.post('The Dark Knight was amazing.')
+    # => {'status' => 'OK'} if success, otherwise 'FAIL'
 
-  # Grab latest 5 posts.
-  pingfm.latest(5)  # => {'messages' => [...]}
+    # Post using custom user trigger; must be defined on the Ping.fm site.
+    pingfm.tpost('The message here.', '#something_custom', 'Optional Title')
+    # => {'status' => 'OK'} if success, otherwise 'FAIL'
 
-  # Posting to all services.
-  pingfm.post('The Dark Knight was amazing.')
-  # => {'status' => 'OK'} if success, otherwise 'FAIL'
+== REQUIREMENTS:
 
-  # Post using custom user trigger; must be defined on the Ping.fm site.
-  pingfm.tpost('The message here.', '#something_custom', 'Optional Title')
-  # => {'status' => 'OK'} if success, otherwise 'FAIL'
+* libxml-ruby
 
+== INSTALL:
 
-Legal Fluff
------------
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+* sudo gem install pingfm --source http://gems.github.com
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
+OR,
+
+* sudo gem sources -a http://gems.github.com
+* sudo gem install pingfm
+
+== LICENSE:
+
+(The MIT License)
+
+Copyright (c) 2008 Krunoslav Husak, Dale Campbell, Kevin Williams
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

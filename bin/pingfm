@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+
+require File.expand_path(
+    File.join(File.dirname(__FILE__), '..', 'lib', 'pingfm'))
+
+# Put your code here
+api_key = '784025ab39e83fa0b7033b2093bf6fae-1216750246'
+
+if ARGV.length < 2
+  puts "usage: pingfm <api_key> 'your message'"
+  exit 1
+end
+
+pingfm = Pingfm::Client.new(api_key, ARGV[0])
+
+s = pingfm.validate
+if s['status'] == 'OK'
+  post_result = pingfm.post(ARGV[1])
+  if s['status'] == 'FAIL'
+    puts s['message']
+  end
+  # pingfm.latest(5).each do |i|
+  #     puts i['message']
+  #   end
+else
+  puts s['message']
+end
+
+# EOF
