@@ -1,6 +1,7 @@
 # Ping.fm Ruby Client
 require 'net/http'
 # require 'rexml/document'
+require 'rubygems'
 require 'libxml'
 
 module Pingfm
@@ -49,7 +50,7 @@ module Pingfm
     			services['services'].push({'id' => service.attributes['id'], 'name' => service.attributes['name'], 'methods' => service.find_first('methods').content})
   			end
   			servicenodes = nil
-  			GC.start
+        # GC.start
   			return services
   		else
   			return status_fail(response)
@@ -80,7 +81,7 @@ module Pingfm
   				triggerservicenodes = nil
   			end
   			triggernodes = nil
-  			GC.start
+        # GC.start
   			return triggers
   		else
   			return status_fail(response)
@@ -130,7 +131,7 @@ module Pingfm
   				messageservicenodes = nil
   			end
   			messagenodes = nil
-  			GC.start
+        # GC.start
   			return latest
   		else
   			return status_fail(response)
@@ -217,4 +218,5 @@ module Pingfm
   	end
 
   end
+  
 end

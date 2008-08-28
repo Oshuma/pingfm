@@ -3,25 +3,23 @@
 require File.expand_path(
     File.join(File.dirname(__FILE__), '..', 'lib', 'pingfm'))
 
-# Put your code here
-api_key = '784025ab39e83fa0b7033b2093bf6fae-1216750246'
+api_key = 'e92ca0bc475ea072590791d28b133544'
+app_key = '784025ab39e83fa0b7033b2093bf6fae-1216750246'
 
-if ARGV.length < 2
-  puts "usage: pingfm <api_key> 'your message'"
-  exit 1
-end
+# if ARGV.length < 2
+#   puts "usage: pingfm <api_key> 'your message'"
+#   exit 1
+# end
 
-pingfm = Pingfm::Client.new(api_key, ARGV[0])
+pingfm = ::Pingfm::Client.new(api_key, app_key)
 
 s = pingfm.validate
 if s['status'] == 'OK'
-  post_result = pingfm.post(ARGV[1])
+  status = ARGV.join(' ')
+  post_result = pingfm.post(status)
   if s['status'] == 'FAIL'
     puts s['message']
   end
-  # pingfm.latest(5).each do |i|
-  #     puts i['message']
-  #   end
 else
   puts s['message']
 end
