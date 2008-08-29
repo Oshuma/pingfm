@@ -19,6 +19,8 @@ if s['status'] == 'OK'
   post_result = pingfm.post(status)
   if s['status'] == 'FAIL'
     puts s['message']
+  else
+    puts 'message sent'
   end
 else
   puts s['message']

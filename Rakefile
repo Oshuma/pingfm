@@ -16,7 +16,6 @@ PROJ.url = 'http://github.com/kevwil/pingfm/'
 PROJ.version = ENV['VERSION'] || Pingfm.version
 PROJ.rubyforge.name = 'pingfm'
 PROJ.readme_file = 'README'
-PROJ.gem.dependencies << 'libxml-ruby'
 
 PROJ.spec.opts << '--color'
 

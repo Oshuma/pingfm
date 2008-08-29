@@ -1,8 +1,6 @@
 # Ping.fm Ruby Client
 require 'net/http'
-# require 'rexml/document'
-require 'rubygems'
-require 'libxml'
+require 'rexml/document'
 
 module Pingfm
   
@@ -24,8 +22,7 @@ module Pingfm
   	#   {'status' => 'FAIL', 'message' => 'message what went wrong'}
   	def validate
   	  response = get_response('user.validate')
-      # if response.elements['rsp'].attributes['status'] == 'OK'
-  		if response.find_first('/rsp').attributes['status'] == 'OK'
+  		if response.elements['rsp'].attributes['status'] == 'OK'
   			return status_ok
   		else
   			return status_fail(response)
@@ -39,18 +36,12 @@ module Pingfm
   	#   {'status' => 'FAIL', 'message' => 'message what went wrong'}
   	def services
   	  response = get_response('user.services')
-      # if response.elements['rsp'].attributes['status'] == 'OK'
-  		if response.find_first('/rsp').attributes['status'] == 'OK'
-  			services = status_ok
+  		if response.elements['rsp'].attributes['status'] == 'OK'
+  			services = status_ok()
   			services['services'] = []
-        # response.elements.each('rsp/services/service') do |service|
-        servicenodes = response.find('/rsp/services/service')
-        servicenodes.each do |service|
-          # services['services'].push({'id' => service.attributes['id'], 'name' => service.attributes['name'], 'methods' => service.elements['methods'].text})
-    			services['services'].push({'id' => service.attributes['id'], 'name' => service.attributes['name'], 'methods' => service.find_first('methods').content})
+  			response.elements.each('rsp/services/service') do |service|
+  				services['services'].push({'id' => service.attributes['id'], 'name' => service.attributes['name'], 'methods' => service.elements['methods'].text})
   			end
-  			servicenodes = nil
-        # GC.start
   			return services
   		else
   			return status_fail(response)
@@ -64,24 +55,16 @@ module Pingfm
   	#   {'status' => 'FAIL', 'message' => 'message what went wrong'}
   	def triggers
   	  response = get_response('user.triggers')
-      # if response.elements['rsp'].attributes['status'] == 'OK'
-  		if response.find_first('/rsp').attributes['status'] == 'OK'
+  		if response.elements['rsp'].attributes['status'] == 'OK'
   			triggers = status_ok
   			triggers['triggers'] = []
-        # response.elements.each('rsp/triggers/trigger') do |trigger|
-        triggernodes = response.find('/rsp/triggers/trigger')
-        triggernodes.each do |trigger|
+  			response.elements.each('rsp/triggers/trigger') do |trigger|
   				triggers['triggers'].push({'id' => trigger.attributes['id'], 'method' => trigger.attributes['method'], 'services' => []})
 
-          # trigger.elements.each('services/service') do |service|
-          triggerservicenodes = trigger.find('services/service')
-          triggerservicenodes.each do |service|
+  				trigger.elements.each('services/service') do |service|
   					triggers['triggers'].last['services'].push({'id' => service.attributes['id'], 'name' => service.attributes['name']})
   				end
-  				triggerservicenodes = nil
   			end
-  			triggernodes = nil
-        # GC.start
   			return triggers
   		else
   			return status_fail(response)
@@ -98,40 +81,27 @@ module Pingfm
   	#   {'status' => 'FAIL', 'message' => 'message what went wrong'}
   	def latest(limit = 25, order = 'DESC')
   	  response = get_response('user.latest', 'limit' => limit, 'order' => order)
-      # if response.elements['rsp'].attributes['status'] == 'OK'
-  		if response.find_first('/rsp').attributes['status'] == 'OK'
+  		if response.elements['rsp'].attributes['status'] == 'OK'
   			latest = status_ok
   			latest['messages'] = []
-        # response.elements.each('rsp/messages/message') do |message|
-        messagenodes = response.find('/rsp/messages/message')
-        messagenodes.each do |message|
+  			response.elements.each('rsp/messages/message') do |message|
   				latest['messages'].push({})
   				latest['messages'].last['id'] = message.attributes['id']
   				latest['messages'].last['method'] = message.attributes['method']
-          # latest['messages'].last['rfc'] = message.elements['date'].attributes['rfc']
-  				latest['messages'].last['rfc'] = message.find_first('date').attributes['rfc']
-          # latest['messages'].last['unix'] = message.elements['date'].attributes['unix']
-  				latest['messages'].last['unix'] = message.find_first('date').attributes['unix']
+  				latest['messages'].last['rfc'] = message.elements['date'].attributes['rfc']
+  				latest['messages'].last['unix'] = message.elements['date'].attributes['unix']
 
-          # if message.elements['*/title'] != nil
-          if message.find_first('*/title') != nil
-            # latest['messages'].last['title'] = message.elements['*/title'].text
-    				latest['messages'].last['title'] = message.find_first('*/title').content
+  				if message.elements['*/title'] != nil
+  					latest['messages'].last['title'] = message.elements['*/title'].text
   				else
   					latest['messages'].last['title'] = ''
   				end
-          # latest['messages'].last['body'] = message.elements['*/body'].text
-  				latest['messages'].last['body'] = message.find_first('*/body').content
+  				latest['messages'].last['body'] = message.elements['*/body'].text
   				latest['messages'].last['services'] = []
-          # message.elements.each('services/service') do |service|
-  				messageservicenodes = message.find('services/service')
-  				messageservicenodes.each do |service|
+  				message.elements.each('services/service') do |service|
   					latest['messages'].last['services'].push({'id' => service.attributes['id'], 'name' => service.attributes['name']})
   				end
-  				messageservicenodes = nil
   			end
-  			messagenodes = nil
-        # GC.start
   			return latest
   		else
   			return status_fail(response)
@@ -155,8 +125,7 @@ module Pingfm
   	                          'body' => body, 'title' => title,
   	                          'post_method' => post_method, 'service' => service,
   	                          'debug' => debug)
-      # if response.elements['rsp'].attributes['status'] == 'OK'                        
-  		if response.find_first('/rsp').attributes['status'] == 'OK'
+  		if response.elements['rsp'].attributes['status'] == 'OK'
   			return status_ok
   		else
   			return status_fail(response)
@@ -178,8 +147,7 @@ module Pingfm
   	  response = get_response('user.tpost',
   	                          'body' => body, 'title' => title,
   	                          'trigger' => trigger, 'debug' => debug)
-      # if response.elements['rsp'].attributes['status'] == 'OK'                        
-  		if response.find_first('/rsp').attributes['status'] == 'OK'
+  		if response.elements['rsp'].attributes['status'] == 'OK'
   			return status_ok
   		else
   			return status_fail(response)
@@ -194,10 +162,7 @@ module Pingfm
     # with the request.  The API key and user app key are merged with this on every call.
     def get_response(type, parameters = {})
       parameters.merge!('api_key' => @api_key, 'user_app_key' => @user_app_key)
-      # REXML::Document.new(http_request("#{API_URL}/#{type}", parameters))
-      xp = LibXML::XML::Parser.new
-      xp.string = http_request("#{API_URL}/#{type}", parameters)
-      return xp.parse
+  		REXML::Document.new(http_request("#{API_URL}/#{type}", parameters))
     end
 
     # This makes the actual HTTP request.
@@ -213,8 +178,7 @@ module Pingfm
 
     # Failed response.
   	def status_fail(response)
-      # return {'status' => 'FAIL', 'message' => response.elements['rsp/message'].text}
-    	return {'status' => 'FAIL', 'message' => response.find_first('/rsp/message').content}
+  		return {'status' => 'FAIL', 'message' => response.elements['rsp/message'].text}
   	end
 
   end

@@ -3,9 +3,8 @@ Manifest.txt
 README
 Rakefile
 bin/pingfm
-lib/client.rb
 lib/pingfm.rb
-pingfm.gemspec
+lib/pingfm/client.rb
 spec/pingfm_spec.rb
 spec/spec_helper.rb
 tasks/ann.rake
