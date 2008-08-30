@@ -3,15 +3,17 @@
 require File.expand_path(
     File.join(File.dirname(__FILE__), '..', 'lib', 'pingfm'))
 
-api_key = 'e92ca0bc475ea072590791d28b133544'
-app_key = '784025ab39e83fa0b7033b2093bf6fae-1216750246'
+keyloader = ::Pingfm::Keyloader.new
+unless keyloader.has_keys?
+  keyloader.api_key = 'e92ca0bc475ea072590791d28b133544'
+  puts 'Enter your ping.fm key from http://ping.fm/key/ here: '
+  keyloader.app_key = STDIN.gets.chomp
+  keyloader.save
+end
 
-# if ARGV.length < 2
-#   puts "usage: pingfm <api_key> 'your message'"
-#   exit 1
-# end
+# post message from ARGV
 
-pingfm = ::Pingfm::Client.new(api_key, app_key)
+pingfm = ::Pingfm::Client.new(keyloader.api_key, keyloader.app_key)
 
 s = pingfm.validate
 if s['status'] == 'OK'
