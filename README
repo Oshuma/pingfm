@@ -11,12 +11,24 @@ Ping fm (http://ping.fm) is a simple service that makes updating your social net
 
 == FEATURES/PROBLEMS:
 
-* need tests!
-* would be great to only have to specify keys once, perhaps some user profile yaml file
+* installing the gem creates a 'pingfm' shell script to post from the shell
+* keys are stored in a YAML file in your home directory
+
+* need to decide on a home page and get an official API key from ping.fm
 
 == SYNOPSIS:
 
-  Check the source comments for more details.
+  Shell usage:
+  
+  pingfm this is my post to my default services
+  
+  Everything after the 'pingfm' command is what will be posted to the service.
+  
+  If your keys have not been stored, it will ask for your key, which you can obtain
+  at http://ping.fm/key/. Enter this and it will be saved in a YAML file so that
+  you won't be asked for it again.
+  
+  Lib usage:
 
     # Require the lib and initialize it.
     require 'pingfm'
@@ -36,10 +48,13 @@ Ping fm (http://ping.fm) is a simple service that makes updating your social net
     # Post using custom user trigger; must be defined on the Ping.fm site.
     pingfm.tpost('The message here.', '#something_custom', 'Optional Title')
     # => {'status' => 'OK'} if success, otherwise 'FAIL'
+    
+
+    Check the source comments for more details.
 
 == REQUIREMENTS:
 
-* libxml-ruby
+none
 
 == INSTALL:
 

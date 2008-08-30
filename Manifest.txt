@@ -1,3 +1,4 @@
+.gitignore
 History.txt
 Manifest.txt
 README
@@ -5,6 +6,8 @@ Rakefile
 bin/pingfm
 lib/pingfm.rb
 lib/pingfm/client.rb
+lib/pingfm/keyloader.rb
+spec/keyloader_spec.rb
 spec/pingfm_spec.rb
 spec/spec_helper.rb
 tasks/ann.rake
