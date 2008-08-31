@@ -3,7 +3,7 @@ require 'net/http'
 require 'rexml/document'
 
 module Pingfm
-  
+
   # MUST NOT end with a trailing slash, as this string is interpolated like this:
   # "#{API_URL}/user.services"
   API_URL = 'http://api.ping.fm/v1'
@@ -182,5 +182,5 @@ module Pingfm
   	end
 
   end
-  
+
 end
