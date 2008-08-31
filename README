@@ -1,56 +1,59 @@
-pingfm
-    by:
-    * Krunoslav Husak (http://h00s.net)
-    * Dale Campbell (http://corrupt.save-state.net)
-    * Kevin Williams (http://almostserio.us)
-    http://github.com/kevwil/pingfm/
+Ping.fm Ruby Client/Library
+
+Authors::
+
+  * Krunoslav Husak (http://h00s.net)
+  * Dale Campbell (http://corrupt.save-state.net)
+  * Kevin Williams (http://almostserio.us)
+
+== CODE:
+
+  http://github.com/Oshuma/pingfm/
 
 == DESCRIPTION:
 
-Ping fm (http://ping.fm) is a simple service that makes updating your social networks a snap, and this it's Ruby library.
+Ping.fm (http://ping.fm) is a simple service that makes updating your social networks a snap, and this it's Ruby library.
 
 == FEATURES/PROBLEMS:
 
-* installing the gem creates a 'pingfm' shell script to post from the shell
-* keys are stored in a YAML file in your home directory
-
-* need to decide on a home page and get an official API key from ping.fm
+* Installing the gem creates a 'pingfm' shell script to post from the shell.
+* Keys are stored in a YAML file in your home directory (under Linux/OSX).
 
 == SYNOPSIS:
 
-  Shell usage:
-  
-  pingfm this is my post to my default services
-  
-  Everything after the 'pingfm' command is what will be posted to the service.
-  
-  If your keys have not been stored, it will ask for your key, which you can obtain
-  at http://ping.fm/key/. Enter this and it will be saved in a YAML file so that
-  you won't be asked for it again.
-  
-  Lib usage:
+Shell usage:
 
-    # Require the lib and initialize it.
-    require 'pingfm'
-    pingfm = Pingfm::Client.new('api_key', 'user_app_key')
+  pingfm "this will post to my default services"
 
-    # Ensure proper API and User App keys.
-    pingfm.validate['status']
-    # => 'OK' if success, otherwise 'FAIL'
+Everything after the 'pingfm' command is what will be posted to the service.
 
-    # Grab latest 5 posts.
-    pingfm.latest(5)  # => {'messages' => [...]}
+If your keys have not been stored, it will ask for your keys, which you can obtain
+at http://ping.fm/key/. Enter this and it will be saved in a YAML file so that
+you won't be asked for it again.
 
-    # Posting to all services.
-    pingfm.post('The Dark Knight was amazing.')
-    # => {'status' => 'OK'} if success, otherwise 'FAIL'
+Library usage:
 
-    # Post using custom user trigger; must be defined on the Ping.fm site.
-    pingfm.tpost('The message here.', '#something_custom', 'Optional Title')
-    # => {'status' => 'OK'} if success, otherwise 'FAIL'
-    
+  # Require the lib and initialize it.
+  require 'pingfm'
+  pingfm = Pingfm::Client.new('api_key', 'user_app_key')
 
-    Check the source comments for more details.
+  # Ensure proper API and User App keys.
+  pingfm.validate['status']
+  # => 'OK' if success, otherwise 'FAIL'
+
+  # Grab latest 5 posts.
+  pingfm.latest(5)  # => {'messages' => [...]}
+
+  # Posting to all services.
+  pingfm.post('The Dark Knight was amazing.')
+  # => {'status' => 'OK'} if success, otherwise 'FAIL'
+
+  # Post using custom user trigger; must be defined on the Ping.fm site.
+  pingfm.tpost('The message here.', '#something_custom', 'Optional Title')
+  # => {'status' => 'OK'} if success, otherwise 'FAIL'
+
+
+Check the source comments for more details.
 
 == REQUIREMENTS:
 
@@ -58,12 +61,12 @@ none
 
 == INSTALL:
 
-* sudo gem install pingfm --source http://gems.github.com
+  sudo gem install oshuma-pingfm --source http://gems.github.com
 
-OR,
+*OR*
 
-* sudo gem sources -a http://gems.github.com
-* sudo gem install pingfm
+  sudo gem sources -a http://gems.github.com (only need to do this once)
+  sudo gem install oshuma-pingfm
 
 == LICENSE:
 
