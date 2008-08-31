@@ -1,14 +1,14 @@
 Ping.fm Ruby Client/Library
 
-Authors::
+== Authors
 
-  * Krunoslav Husak (http://h00s.net)
-  * Dale Campbell (http://corrupt.save-state.net)
-  * Kevin Williams (http://almostserio.us)
+* Krunoslav Husak (http://h00s.net)
+* Dale Campbell (http://corrupt.save-state.net)
+* Kevin Williams (http://almostserio.us)
 
 == CODE:
 
-  http://github.com/Oshuma/pingfm/
+http://github.com/Oshuma/pingfm/
 
 == DESCRIPTION:
 
@@ -23,13 +23,17 @@ Ping.fm (http://ping.fm) is a simple service that makes updating your social net
 
 Shell usage:
 
-  pingfm "this will post to my default services"
+  $ pingfm "this message will post to my default services"
 
 Everything after the 'pingfm' command is what will be posted to the service.
 
-If your keys have not been stored, it will ask for your keys, which you can obtain
-at http://ping.fm/key/. Enter this and it will be saved in a YAML file so that
-you won't be asked for it again.
+If your keys have not been stored, it will ask for them.  These keys will be saved
+in a YAML file in your home directory and you won't be asked for them again.
+
+You can obtain your keys here:
+
+* User API Key - http://ping.fm/key/
+* Application API Key - http://ping.fm/developers/
 
 Library usage:
 
@@ -57,16 +61,16 @@ Check the source comments for more details.
 
 == REQUIREMENTS:
 
-none
+Ruby!
 
 == INSTALL:
 
-  sudo gem install oshuma-pingfm --source http://gems.github.com
+  $ sudo gem install oshuma-pingfm --source http://gems.github.com
 
 *OR*
 
-  sudo gem sources -a http://gems.github.com (only need to do this once)
-  sudo gem install oshuma-pingfm
+  $ sudo gem sources -a http://gems.github.com (only need to do this once)
+  $ sudo gem install oshuma-pingfm
 
 == LICENSE:
 
