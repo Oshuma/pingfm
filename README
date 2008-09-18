@@ -8,7 +8,7 @@ Ping.fm Ruby Client/Library
 
 == CODE:
 
-http://github.com/Oshuma/pingfm/
+http://pingfm.rubyforge.org/
 
 == DESCRIPTION:
 
@@ -23,9 +23,10 @@ Ping.fm (http://ping.fm) is a simple service that makes updating your social net
 
 Shell usage:
 
-  $ pingfm "this message will post to my default services"
+  $ pingfm This message will post to my default services.
 
-Everything after the 'pingfm' command is what will be posted to the service.
+Everything after the 'pingfm' command is what will be posted to the service.  You
+may also include the message within quotes (ex. using the client within a shell script).
 
 If your keys have not been stored, it will ask for them.  These keys will be saved
 in a YAML file in your home directory and you won't be asked for them again.
@@ -37,7 +38,7 @@ You can obtain your keys here:
 
 Library usage:
 
-  # Require the lib and initialize it.
+  # Require the library and initialize it.
   require 'pingfm'
   pingfm = Pingfm::Client.new('api_key', 'user_app_key')
 
@@ -65,10 +66,12 @@ Ruby!
 
 == INSTALL:
 
-  $ sudo gem install oshuma-pingfm --source http://gems.github.com
+  # From Rubyforge...
+  $ sudo gem install pingfm
 
 *OR*
 
+  # From Github...
   $ sudo gem sources -a http://gems.github.com (only need to do this once)
   $ sudo gem install oshuma-pingfm
 

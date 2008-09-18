@@ -1,12 +1,14 @@
 #!/usr/bin/env ruby
 
+# TODO: Move this into a YAML config?
+API_KEY = '5fcb8b7041d5c32c7e1e60dc076989ba'
+
 require File.expand_path(
     File.join(File.dirname(__FILE__), '..', 'lib', 'pingfm'))
 
 keyloader = ::Pingfm::Keyloader.new
 unless keyloader.has_keys?
-  puts 'Enter your Ping.fm Application API key (http://ping.fm/developers/):'
-  keyloader.api_key = STDIN.gets.chomp
+  keyloader.api_key = API_KEY
   puts 'Enter your Ping.fm User API key (http://ping.fm/key/): '
   keyloader.app_key = STDIN.gets.chomp
   keyloader.save

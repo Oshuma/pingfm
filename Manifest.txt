@@ -23,4 +23,3 @@ tasks/setup.rb
 tasks/spec.rake
 tasks/svn.rake
 tasks/test.rake
-test/test_pingfm.rb

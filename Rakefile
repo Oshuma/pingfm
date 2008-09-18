@@ -10,9 +10,9 @@ require 'pingfm'
 task :default => 'spec:run'
 
 PROJ.name = 'pingfm'
-PROJ.authors = 'Krunoslav Husak, Dale Campbell, Kevin Williams'
-PROJ.email = 'kevwil@gmail.com'
-PROJ.url = 'http://github.com/kevwil/pingfm/'
+PROJ.authors = ['Krunoslav Husak', 'Dale Campbell', 'Kevin Williams']
+PROJ.email = ['dale@save-state.net', 'kevwil@gmail.com']
+PROJ.url = 'http://pingfm.rubyforge.org/'
 PROJ.version = ENV['VERSION'] || Pingfm.version
 PROJ.rubyforge.name = 'pingfm'
 PROJ.readme_file = 'README'
