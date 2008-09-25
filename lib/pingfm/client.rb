@@ -29,9 +29,32 @@ module Pingfm
   		end
   	end
 
+  	# Return a complete list of supported services
+  	# if successful returns:
+  	#   {'status' => 'OK', 'services' => [{'id' => 'serviceid', 'name' => 'servicename', 'trigger' => 'servicetrigger', 'url' => 'serviceurl', 'icon' => 'serviceicon'}, ...]}
+  	# if unsuccessful returns:
+  	#   {'status' => 'FAIL', 'message' => 'message what went wrong'}
+  	def system_services
+  	  response = get_response('system.services')
+  		if response.elements['rsp'].attributes['status'] == 'OK'
+  			services = status_ok()
+  			services['services'] = []
+  			response.elements.each('rsp/services/service') do |service|
+  				services['services'].push({'id' => service.attributes['id'],
+  											'name' => service.attributes['name'],
+  											'trigger' => service.elements['trigger'].text,
+  											'url' => service.elements['url'].text,
+  											'icon' => service.elements['icon'].text})
+  			end
+  			return services
+  		else
+  			return status_fail(response)
+  		end
+  	end
+
   	# Returns a list of services the user has set up through Ping.fm
   	# if successful returns:
-  	#   {'status' => 'OK', services = [{'id' => 'serviceid', 'name' => 'servicename', 'methods' => 'status,blog'}, ...]}
+  	#   {'status' => 'OK', 'services' => [{'id' => 'serviceid', 'name' => 'servicename', 'trigger' => 'servicetrigger', 'url' => 'serviceurl', 'icon' => 'serviceicon', 'methods' => 'status,blog'}, ...]}
   	# if unsuccessful returns:
   	#   {'status' => 'FAIL', 'message' => 'message what went wrong'}
   	def services
@@ -40,7 +63,12 @@ module Pingfm
   			services = status_ok()
   			services['services'] = []
   			response.elements.each('rsp/services/service') do |service|
-  				services['services'].push({'id' => service.attributes['id'], 'name' => service.attributes['name'], 'methods' => service.elements['methods'].text})
+  				services['services'].push({'id' => service.attributes['id'],
+  											'name' => service.attributes['name'],
+  											'trigger' => service.elements['trigger'].text,
+  											'url' => service.elements['url'].text,
+  											'icon' => service.elements['icon'].text,
+  											'methods' => service.elements['methods'].text})
   			end
   			return services
   		else
@@ -50,7 +78,7 @@ module Pingfm
 
   	# Returns a user's custom triggers
   	# if successful returns:
-  	#   {'status' => 'OK', triggers = [{'id' => 'triggerid', 'method' => 'triggermethod', 'services' => [{'id' => 'serviceid', 'name' => 'servicename'}, ...]}, ...]}
+  	#   {'status' => 'OK', 'triggers' => [{'id' => 'triggerid', 'method' => 'triggermethod', 'services' => [{'id' => 'serviceid', 'name' => 'servicename'}, ...]}, ...]}
   	# if unsuccessful returns:
   	#   {'status' => 'FAIL', 'message' => 'message what went wrong'}
   	def triggers
@@ -95,6 +123,11 @@ module Pingfm
   					latest['messages'].last['title'] = message.elements['*/title'].text
   				else
   					latest['messages'].last['title'] = ''
+  				end
+  				if message.elements['location'] != nil
+  					latest['messages'].last['location'] = message.elements['location'].text
+  				else
+  					latest['messages'].last['location'] = ''
   				end
   				latest['messages'].last['body'] = message.elements['*/body'].text
   				latest['messages'].last['services'] = []
