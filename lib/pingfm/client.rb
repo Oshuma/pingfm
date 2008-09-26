@@ -29,32 +29,32 @@ module Pingfm
   		end
   	end
 
-  	# Return a complete list of supported services
-  	# if successful returns:
-  	#   {'status' => 'OK', 'services' => [{'id' => 'serviceid', 'name' => 'servicename', 'trigger' => 'servicetrigger', 'url' => 'serviceurl', 'icon' => 'serviceicon'}, ...]}
-  	# if unsuccessful returns:
-  	#   {'status' => 'FAIL', 'message' => 'message what went wrong'}
-  	def system_services
-  	  response = get_response('system.services')
-  		if response.elements['rsp'].attributes['status'] == 'OK'
-  			services = status_ok()
-  			services['services'] = []
-  			response.elements.each('rsp/services/service') do |service|
-  				services['services'].push({'id' => service.attributes['id'],
-  											'name' => service.attributes['name'],
-  											'trigger' => service.elements['trigger'].text,
-  											'url' => service.elements['url'].text,
-  											'icon' => service.elements['icon'].text})
-  			end
-  			return services
-  		else
-  			return status_fail(response)
-  		end
-  	end
+    # Return a complete list of supported services
+    # if successful returns:
+    #   {'status' => 'OK', 'services' => [{'id' => 'serviceid', 'name' => 'servicename', 'trigger' => 'servicetrigger', 'url' => 'serviceurl', 'icon' => 'serviceicon'}, ...]}
+    # if unsuccessful returns:
+    #   {'status' => 'FAIL', 'message' => 'message what went wrong'}
+    def system_services
+      response = get_response('system.services')
+      if response.elements['rsp'].attributes['status'] == 'OK'
+        services = status_ok
+        services['services'] = []
+        response.elements.each('rsp/services/service') do |service|
+          services['services'].push({'id'      => service.attributes['id'],
+                                     'name'    => service.attributes['name'],
+                                     'trigger' => service.elements['trigger'].text,
+                                     'url'     => service.elements['url'].text,
+                                     'icon'    => service.elements['icon'].text})
+        end
+        return services
+      else
+        return status_fail(response)
+      end
+    end
 
   	# Returns a list of services the user has set up through Ping.fm
   	# if successful returns:
-  	#   {'status' => 'OK', 'services' => [{'id' => 'serviceid', 'name' => 'servicename', 'trigger' => 'servicetrigger', 'url' => 'serviceurl', 'icon' => 'serviceicon', 'methods' => 'status,blog'}, ...]}
+    #   {'status' => 'OK', 'services' => [{'id' => 'serviceid', 'name' => 'servicename', 'trigger' => 'servicetrigger', 'url' => 'serviceurl', 'icon' => 'serviceicon', 'methods' => 'status,blog'}, ...]}
   	# if unsuccessful returns:
   	#   {'status' => 'FAIL', 'message' => 'message what went wrong'}
   	def services
@@ -124,11 +124,11 @@ module Pingfm
   				else
   					latest['messages'].last['title'] = ''
   				end
-  				if message.elements['location'] != nil
-  					latest['messages'].last['location'] = message.elements['location'].text
-  				else
-  					latest['messages'].last['location'] = ''
-  				end
+          if message.elements['location'] != nil
+            latest['messages'].last['location'] = message.elements['location'].text
+          else
+            latest['messages'].last['location'] = ''
+          end
   				latest['messages'].last['body'] = message.elements['*/body'].text
   				latest['messages'].last['services'] = []
   				message.elements.each('services/service') do |service|
