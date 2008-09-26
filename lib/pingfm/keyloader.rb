@@ -19,7 +19,7 @@ module Pingfm
     KEY_PATH = (RUBY_PLATFORM =~ /mswin32/ ? ENV['HOMEPATH'] : ENV['HOME'])
     KEY_FILE = '.pingfm_keys.yml'
 
-    def initialize(keyfile = File.join(KEY_PATH, KEY_FILE))
+    def initialize(keyfile = File.expand_path(File.join(KEY_PATH, KEY_FILE)))
       @api_key = nil
       @keyfile = keyfile
 
