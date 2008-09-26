@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# TODO: Eventually add some flags to support all Ping.fm functionality.
 
 # TODO: Move this into a YAML config?
 API_KEY = '5fcb8b7041d5c32c7e1e60dc076989ba'

@@ -16,7 +16,10 @@ module Pingfm
     # ping.fm uses this as the key for the user
     attr_accessor :app_key
 
-    def initialize(keyfile = File.expand_path('~/.pingfm_keys.yml'))
+    KEY_PATH = (RUBY_PLATFORM =~ /mswin32/ ? ENV['HOMEPATH'] : ENV['HOME'])
+    KEY_FILE = '.pingfm_keys.yml'
+
+    def initialize(keyfile = File.join(KEY_PATH, KEY_FILE))
       @api_key = nil
       @keyfile = keyfile
 
