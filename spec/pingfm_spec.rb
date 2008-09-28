@@ -1,9 +1,24 @@
 # $Id$
 # TODO: LOTS of repetition here that can probably be refactored a bit.
+# TODO: Split these specs into a pingfm/ subdirectory, moving the client specs into their own file.
 
 require File.join(File.dirname(__FILE__), %w[spec_helper])
 
-describe Pingfm::Client, " with expected results" do
+describe Pingfm, 'main module' do
+  it 'should return the version string' do
+    Pingfm.version.should be_a_kind_of(String)
+  end
+
+  it 'should return the library path' do
+    Pingfm.libpath.should eql(Pingfm::LIBPATH)
+  end
+
+  it 'should return the path to the library' do
+    Pingfm.path.should eql(Pingfm::PATH)
+  end
+end
+
+describe Pingfm::Client, "with expected results" do
 
   before(:each) do
     @client = Pingfm::Client.new('a','b')
@@ -153,7 +168,7 @@ describe Pingfm::Client, " with expected results" do
 
 end
 
-describe Pingfm::Client, " with error messages" do
+describe Pingfm::Client, "with error messages" do
   before(:each) do
     @client = Pingfm::Client.new('a','b')
     @params = {'api_key' => 'a', 'user_app_key' => 'b'}
