@@ -1,4 +1,5 @@
 # $Id$
+# TODO: LOTS of repetition here that can probably be refactored a bit.
 
 require File.join(File.dirname(__FILE__), %w[spec_helper])
 
@@ -47,6 +48,26 @@ describe Pingfm::Client, " with expected results" do
     result['services'].first['id'].should eql('twitter')
   end
 
+  it "should list the system services" do
+    init_system_services_response
+    uri = URI.parse "#{Pingfm::API_URL}/#{@service_type}"
+
+    # mock the http call
+    http_resp = mock('response')
+    http_resp.should_receive(:body).and_return(@response)
+    Net::HTTP.should_receive(:post_form).with(uri, @params).and_return(http_resp)
+
+    # call and verify
+    result = @client.system_services
+    result.should_not be_empty
+    result['status'].should_not be_nil
+    result['status'].should eql('OK')
+    result['services'].should_not be_nil
+    result['services'].should_not be_empty
+    result['services'].length.should eql(2)
+    result['services'].first['id'].should eql('bebo')
+  end
+
   it "should list the user's custom triggers" do
     init_trigger_response
 
@@ -88,6 +109,7 @@ describe Pingfm::Client, " with expected results" do
     result['messages'].should_not be_empty
     result['messages'].length.should eql(3)
     result['messages'].first['id'].should eql('12345')
+    result['messages'].last['location'].should_not be_empty
   end
 
   it "should post a message to the service" do
@@ -149,6 +171,119 @@ describe Pingfm::Client, " with error messages" do
 
     # call and verify
     result = @client.validate
+    result.should_not be_empty
+    result['status'].should_not be_nil
+    result['status'].should eql('FAIL')
+    result['message'].should_not be_nil
+  end
+
+  it "should handle a failed system services cleanly" do
+    init_fail_response 'system.services'
+
+    uri = URI.parse "#{Pingfm::API_URL}/#{@service_type}"
+
+    # mock the http call
+    http_resp = mock('response')
+    http_resp.should_receive(:body).and_return(@response)
+    Net::HTTP.should_receive(:post_form).with(uri, @params).and_return(http_resp)
+
+    # call and verify
+    result = @client.system_services
+    result.should_not be_empty
+    result['status'].should_not be_nil
+    result['status'].should eql('FAIL')
+    result['message'].should_not be_nil
+  end
+
+  it "should handle a failed user's services cleanly" do
+    init_fail_response 'user.services'
+
+    uri = URI.parse "#{Pingfm::API_URL}/#{@service_type}"
+
+    # mock the http call
+    http_resp = mock('response')
+    http_resp.should_receive(:body).and_return(@response)
+    Net::HTTP.should_receive(:post_form).with(uri, @params).and_return(http_resp)
+
+    # call and verify
+    result = @client.services
+    result.should_not be_empty
+    result['status'].should_not be_nil
+    result['status'].should eql('FAIL')
+    result['message'].should_not be_nil
+  end
+
+  it "should handle a failed user's triggers cleanly" do
+    init_fail_response 'user.triggers'
+
+    uri = URI.parse "#{Pingfm::API_URL}/#{@service_type}"
+
+    # mock the http call
+    http_resp = mock('response')
+    http_resp.should_receive(:body).and_return(@response)
+    Net::HTTP.should_receive(:post_form).with(uri, @params).and_return(http_resp)
+
+    # call and verify
+    result = @client.triggers
+    result.should_not be_empty
+    result['status'].should_not be_nil
+    result['status'].should eql('FAIL')
+    result['message'].should_not be_nil
+  end
+
+  it "should handle a failed user's latest messages cleanly" do
+    init_fail_response 'user.latest'
+
+    uri = URI.parse "#{Pingfm::API_URL}/#{@service_type}"
+
+    # mock the http call
+    http_resp = mock('response')
+    http_resp.should_receive(:body).and_return(@response)
+    @params.merge!('order' => 'DESC', 'limit' => 25)
+    Net::HTTP.should_receive(:post_form).with(uri, @params).and_return(http_resp)
+
+    # call and verify
+    result = @client.latest
+    result.should_not be_empty
+    result['status'].should_not be_nil
+    result['status'].should eql('FAIL')
+    result['message'].should_not be_nil
+  end
+
+  it "should handle a failed user post cleanly" do
+    init_fail_response 'user.post'
+
+    uri = URI.parse "#{Pingfm::API_URL}/#{@service_type}"
+
+    # mock the http call
+    http_resp = mock('response')
+    http_resp.should_receive(:body).and_return(@response)
+    @params.merge!({'post_method' => 'default', 'title' => '',
+                    'service' => '', 'body' => 'test message', 'debug' => 0})
+    Net::HTTP.should_receive(:post_form).with(uri, @params).and_return(http_resp)
+
+    # call and verify
+    result = @client.post('test message')
+    result.should_not be_empty
+    result['status'].should_not be_nil
+    result['status'].should eql('FAIL')
+    result['message'].should_not be_nil
+  end
+
+  it "should handle a failed user trigger post cleanly" do
+    init_fail_response 'user.tpost'
+
+    uri = URI.parse "#{Pingfm::API_URL}/#{@service_type}"
+
+    # mock the http call
+    http_resp = mock('response')
+    http_resp.should_receive(:body).and_return(@response)
+    @params.merge!({'title' => '', 'body' => 'test message',
+                    'trigger' => '@trigger', 'debug' => 0})
+    Net::HTTP.should_receive(:post_form).with(uri, @params).and_return(http_resp)
+
+    # call and verify
+    result = @client.tpost('test message', '@trigger')
     result.should_not be_empty
     result['status'].should_not be_nil
     result['status'].should eql('FAIL')

@@ -62,6 +62,28 @@ def init_service_response
 EOXML
 end
 
+def init_system_services_response
+  @service_type = 'system.services'
+  @response = <<EOXML
+<rsp status="OK">
+  <transaction>12345</transaction>
+  <method>system.services</method>
+  <services>
+    <service id="bebo" name="Bebo">
+      <trigger>@be</trigger>
+      <url>http://www.bebo.com/</url>
+      <icon>http://p.ping.fm/static/icons/bebo.png</icon>
+    </service>
+    <service id="blogger" name="Blogger">
+      <trigger>@bl</trigger>
+      <url>http://www.blogger.com/</url>
+      <icon>http://p.ping.fm/static/icons/blogger.png</icon>
+    </service>
+  </services>
+</rsp>
+EOXML
+end
+
 def init_trigger_response
   @service_type = 'user.triggers'
   @response = <<EOXML
@@ -121,6 +143,7 @@ def init_latest_response
       <content>
         <body>aXMgdGVzdGluZyBQaW5nLmZtIQ==</body>
       </content>
+      <location>VHVsc2EsIE9L</location>
     </message>
   </messages>
 </rsp>
