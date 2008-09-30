@@ -66,7 +66,7 @@ PROJ = OpenStruct.new(
   # Rcov
   :rcov => OpenStruct.new(
     :dir => 'coverage',
-    :opts => %w[--sort coverage -T],
+    :opts => %w[--sort coverage -T -x rcov.rb],
     :threshold => 90.0,
     :threshold_exact => false
   ),
