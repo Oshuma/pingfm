@@ -7,7 +7,7 @@ unless defined? Pingfm
 module Pingfm
 
   # :stopdoc:
-  VERSION = '1.0.0'
+  VERSION = '1.0.1'
   LIBPATH = ::File.expand_path(::File.dirname(__FILE__)) + ::File::SEPARATOR
   PATH = ::File.dirname(LIBPATH) + ::File::SEPARATOR
   # :startdoc:
