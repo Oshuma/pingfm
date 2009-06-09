@@ -72,7 +72,7 @@ module Pingfm
   			end
   			return services
   		else
-  			return status_fail(response)
+        return status_fail(response)
   		end
   	end
 
@@ -211,7 +211,13 @@ module Pingfm
 
     # Failed response.
   	def status_fail(response)
-  		return {'status' => 'FAIL', 'message' => response.elements['rsp/message'].text}
+      if response.elements.include? 'rsp/message'
+        message = response.elements['rsp/message'].text
+      else
+        message = "Unknown error from Ping.fm"
+      end
+
+  		return {'status' => 'FAIL', 'message' => message}
   	end
 
   end
