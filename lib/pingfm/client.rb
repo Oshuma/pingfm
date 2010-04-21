@@ -1,11 +1,12 @@
 # Ping.fm Ruby Client
 require 'net/http'
-require 'rexml/document'
+require 'rexml/document' # TODO: Rewrite this to use something faster (Nokogiri, possibly).
 
 module Pingfm
 
   # MUST NOT end with a trailing slash, as this string is interpolated like this:
   # "#{API_URL}/user.services"
+  # FIXME: This should be handled better; not so brittle as to break on a trailing slash.
   API_URL = 'http://api.ping.fm/v1'
 
   class Client
