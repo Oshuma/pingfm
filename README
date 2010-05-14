@@ -2,41 +2,26 @@ Ping.fm Ruby Client/Library
 
 == Authors
 
-* Krunoslav Husak (http://h00s.net)
-* Dale Campbell (http://corrupt.save-state.net)
-* Kevin Williams (http://almostserio.us)
+* {Dale Campbell}[http://oshuma.github.com/]
+* {Kevin Williams}[http://kevwil.com/]
+* {Krunoslav Husak}[http://h00s.net]
 
 == CODE:
 
-http://pingfm.rubyforge.org/
+{http://github.com/Oshuma/pingfm}[http://github.com/Oshuma/pingfm]
 
 == DESCRIPTION:
 
 Ping.fm (http://ping.fm) is a simple service that makes updating your social networks a snap, and this it's Ruby library.
 
-== FEATURES/PROBLEMS:
+== ADDITIONAL FEATURES:
 
 * Installing the gem creates a 'pingfm' shell script to post from the shell.
 * Keys are stored in a YAML file in your home directory (under Linux/OSX).
 
 == SYNOPSIS:
 
-Shell usage:
-
-  $ pingfm This message will post to my default services.
-
-Everything after the 'pingfm' command is what will be posted to the service.  You
-may also include the message within quotes (ex. using the client within a shell script).
-
-If your keys have not been stored, it will ask for them.  These keys will be saved
-in a YAML file in your home directory and you won't be asked for them again.
-
-You can obtain your keys here:
-
-* User API Key - http://ping.fm/key/
-* Application API Key - http://ping.fm/developers/
-
-Library usage:
+=== Library Usage
 
   # Require the library and initialize it.
   require 'pingfm'
@@ -57,8 +42,23 @@ Library usage:
   pingfm.tpost('The message here.', '#something_custom', 'Optional Title')
   # => {'status' => 'OK'} if success, otherwise 'FAIL'
 
+Check the {documentation}[http://rdoc.info/projects/Oshuma/pingfm] for more details.
 
-Check the source comments for more details.
+
+=== Shell Usage
+
+  $ pingfm This message will post to my default services.
+
+Everything after the 'pingfm' command is what will be posted to the service.  You
+may also include the message within quotes (ex. using the client within a shell script).
+
+If your keys have not been stored, it will ask for them.  These keys will be saved
+in a YAML file in your home directory and you won't be asked for them again.
+
+You can obtain your keys here:
+
+* User API Key - http://ping.fm/key/
+* Application API Key - http://ping.fm/developers/
 
 == REQUIREMENTS:
 
@@ -66,20 +66,13 @@ Ruby!
 
 == INSTALL:
 
-  # From Rubyforge...
-  $ sudo gem install pingfm
-
-*OR*
-
-  # From Github...
-  $ sudo gem sources -a http://gems.github.com (only need to do this once)
-  $ sudo gem install oshuma-pingfm
+  $ [sudo] gem install pingfm
 
 == LICENSE:
 
 (The MIT License)
 
-Copyright (c) 2008 Krunoslav Husak, Dale Campbell, Kevin Williams
+Copyright (c) 2010 Dale Campbell, Kevin Williams, Krunoslav Husak
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
