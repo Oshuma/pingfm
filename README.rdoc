@@ -1,27 +1,6 @@
-Ping.fm Ruby Client/Library
+= Ping.fm Ruby Library
 
-== Authors
-
-* {Dale Campbell}[http://oshuma.github.com/]
-* {Kevin Williams}[http://kevwil.com/]
-* {Krunoslav Husak}[http://h00s.net]
-
-== CODE:
-
-{http://github.com/Oshuma/pingfm}[http://github.com/Oshuma/pingfm]
-
-== DESCRIPTION:
-
-Ping.fm (http://ping.fm) is a simple service that makes updating your social networks a snap, and this it's Ruby library.
-
-== ADDITIONAL FEATURES:
-
-* Installing the gem creates a 'pingfm' shell script to post from the shell.
-* Keys are stored in a YAML file in your home directory (under Linux/OSX).
-
-== SYNOPSIS:
-
-=== Library Usage
+== Library Usage
 
   # Require the library and initialize it.
   require 'pingfm'
@@ -44,12 +23,11 @@ Ping.fm (http://ping.fm) is a simple service that makes updating your social net
 
 Check the {documentation}[http://rdoc.info/projects/Oshuma/pingfm] for more details.
 
-
-=== Shell Usage
+== Shell Usage
 
   $ pingfm This message will post to my default services.
 
-Everything after the 'pingfm' command is what will be posted to the service.  You
+Everything after the '<tt>pingfm</tt>' command is what will be posted to the service.  You
 may also include the message within quotes (ex. using the client within a shell script).
 
 If your keys have not been stored, it will ask for them.  These keys will be saved
@@ -57,18 +35,38 @@ in a YAML file in your home directory and you won't be asked for them again.
 
 You can obtain your keys here:
 
-* User API Key - http://ping.fm/key/
-* Application API Key - http://ping.fm/developers/
+* User API Key - {http://ping.fm/key/}[http://ping.fm/key/]
+* Application API Key - {http://ping.fm/developers/}[http://ping.fm/developers/]
 
-== REQUIREMENTS:
+
+== Authors
+
+* {Dale Campbell}[http://oshuma.github.com/]
+* {Kevin Williams}[http://kevwil.com/]
+* {Krunoslav Husak}[http://h00s.net]
+
+== Code
+
+{http://github.com/Oshuma/pingfm}[http://github.com/Oshuma/pingfm]
+
+== Description
+
+{Ping.fm}[http://ping.fm/] is a simple service that makes updating your social networks a snap; and this it's Ruby library.
+
+== Additional Features
+
+* Installing the gem also installs a '<tt>pingfm</tt>' binary to post from the command-line.
+* Keys are stored in a YAML file in your home directory (<tt>$HOME/.pingfm_keys.yml</tt>).
+
+== Requirements
 
 Ruby!
 
-== INSTALL:
+== Install
 
   $ [sudo] gem install pingfm
 
-== LICENSE:
+== License
 
 (The MIT License)
 
