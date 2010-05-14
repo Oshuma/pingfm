@@ -1,20 +1,11 @@
-# $Id$
+require 'spec_helper'
+
 # TODO: LOTS of repetition here that can probably be refactored a bit.
 # TODO: Split these specs into a pingfm/ subdirectory, moving the client specs into their own file.
 
-require File.join(File.dirname(__FILE__), %w[spec_helper])
-
-describe Pingfm, 'main module' do
+describe Pingfm do
   it 'should return the version string' do
-    Pingfm.version.should be_a_kind_of(String)
-  end
-
-  it 'should return the library path' do
-    Pingfm.libpath.should eql(Pingfm::LIBPATH)
-  end
-
-  it 'should return the path to the library' do
-    Pingfm.path.should eql(Pingfm::PATH)
+    Pingfm::VERSION.should be_a_kind_of(String)
   end
 end
 

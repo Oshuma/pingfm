@@ -1,4 +1,9 @@
 #!/usr/bin/env ruby
+
+# TODO: Rewrite this POS.
+puts "The 'pingfm' binary will be rewritten as soon as the library is."
+exit
+
 # TODO: Eventually add some flags to support all Ping.fm functionality.
 
 # TODO: Move this into a YAML config?

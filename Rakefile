@@ -1,31 +1,14 @@
-# Look in the tasks/setup.rb file for the various options that can be
-# configured in this Rakefile. The .rake files in the tasks directory
-# are where the options are used.
+require 'spec/rake/spectask'
 
-load 'tasks/setup.rb'
+task :default => :spec
 
-ensure_in_path 'lib'
-require 'pingfm'
-
-task :default => 'spec:run'
-
-PROJ.name = 'pingfm'
-PROJ.authors = ['Krunoslav Husak', 'Dale Campbell', 'Kevin Williams']
-PROJ.email = ['dale@save-state.net', 'kevwil@gmail.com']
-PROJ.url = 'http://pingfm.rubyforge.org/'
-PROJ.version = ENV['VERSION'] || Pingfm.version
-PROJ.rubyforge.name = 'pingfm'
-PROJ.readme_file = 'README'
-
-PROJ.spec.opts << '--color'
-
-namespace :gem do
-  desc 'create a gemspec file to support github gems'
-  task :gemspec => 'gem:prereqs' do
-    File.open("#{PROJ.name}.gemspec", 'w+') do |f|
-      f.write PROJ.gem._spec.to_ruby
-    end
-  end
+desc 'Run the specs'
+Spec::Rake::SpecTask.new(:spec) do |t|
+  t.spec_opts = ['--color']
+  t.spec_files = FileList['spec/**/*_spec.rb']
 end
 
-# EOF
+desc 'Start a console loaded with the library'
+task :console do
+  sh "irb -I ./lib -r 'pingfm'"
+end
