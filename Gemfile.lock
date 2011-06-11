@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     pingfm (2.0.0)
+      slop
 
 GEM
   remote: http://rubygems.org/
@@ -15,6 +16,7 @@ GEM
     rspec-expectations (2.6.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.6.0)
+    slop (1.7.0)
 
 PLATFORMS
   ruby

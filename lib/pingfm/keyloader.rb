@@ -8,8 +8,8 @@ module Pingfm
   # TODO: Encryption might be nice; might be overkill.
   class Keyloader
 
-    KEY_PATH = (RUBY_PLATFORM =~ /mswin32/ ? ENV['HOMEPATH'] : ENV['HOME'])
-    KEY_FILE = '.pingfm_keys.yml'
+    CONFIG_PATH = (RUBY_PLATFORM =~ /mswin32/ ? ENV['HOMEPATH'] : ENV['HOME'])
+    CONFIG_FILE = '.pingfm.yml'
 
     # Path to YAML file containing keys.
     attr_accessor :key_file
@@ -17,7 +17,7 @@ module Pingfm
     # Ping.fm uses this as the key for user authentication.
     attr_accessor :app_key
 
-    def initialize(key_file = File.expand_path(File.join(KEY_PATH, KEY_FILE)))
+    def initialize(key_file = File.expand_path(File.join(CONFIG_PATH, CONFIG_FILE)))
       @key_file = key_file
 
       # Load keys on init.

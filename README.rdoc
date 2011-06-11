@@ -55,7 +55,7 @@ You can obtain your key here:
 == Additional Features
 
 * Installing the gem also installs a '<tt>pingfm</tt>' binary to post from the command-line.
-* User API key is  stored in a YAML file in your home directory (<tt>$HOME/.pingfm_keys.yml</tt>).
+* User API key is stored in a YAML file in your home directory (<tt>$HOME/.pingfm.yml</tt>).
 
 == Requirements
 
