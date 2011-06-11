@@ -4,22 +4,22 @@
 
   # Require the library and initialize it.
   require 'pingfm'
-  pingfm = Pingfm::Client.new('api_key', 'user_app_key')
+  pingfm = Pingfm::Client.new('user_app_key')
 
   # Ensure proper API and User App keys.
   pingfm.validate['status']
-  # => 'OK' if success, otherwise 'FAIL'
+  # => {'status' => 'OK'}  # if success, otherwise 'FAIL'
 
   # Grab latest 5 posts.
   pingfm.latest(5)  # => {'messages' => [...]}
 
   # Posting to all services.
   pingfm.post('The Dark Knight was amazing.')
-  # => {'status' => 'OK'} if success, otherwise 'FAIL'
+  # => {'status' => 'OK'}  # if success, otherwise 'FAIL'
 
   # Post using custom user trigger; must be defined on the Ping.fm site.
   pingfm.tpost('The message here.', '#something_custom', 'Optional Title')
-  # => {'status' => 'OK'} if success, otherwise 'FAIL'
+  # => {'status' => 'OK'}  # if success, otherwise 'FAIL'
 
 Check the {documentation}[http://rdoc.info/projects/Oshuma/pingfm] for more details.
 
@@ -30,13 +30,12 @@ Check the {documentation}[http://rdoc.info/projects/Oshuma/pingfm] for more deta
 Everything after the '<tt>pingfm</tt>' command is what will be posted to the service.  You
 may also include the message within quotes (ex. using the client within a shell script).
 
-If your keys have not been stored, it will ask for them.  These keys will be saved
-in a YAML file in your home directory and you won't be asked for them again.
+If your key has not been stored, it will ask for it.  This key will be saved
+in a YAML file in your home directory and you won't be asked for it again.
 
-You can obtain your keys here:
+You can obtain your key here:
 
 * User API Key - {http://ping.fm/key/}[http://ping.fm/key/]
-* Application API Key - {http://ping.fm/developers/}[http://ping.fm/developers/]
 
 
 == Authors
@@ -56,7 +55,7 @@ You can obtain your keys here:
 == Additional Features
 
 * Installing the gem also installs a '<tt>pingfm</tt>' binary to post from the command-line.
-* Keys are stored in a YAML file in your home directory (<tt>$HOME/.pingfm_keys.yml</tt>).
+* User API key is  stored in a YAML file in your home directory (<tt>$HOME/.pingfm_keys.yml</tt>).
 
 == Requirements
 

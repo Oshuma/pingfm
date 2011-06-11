@@ -165,6 +165,8 @@ module Pingfm
     #   {'status' => 'OK'}
     # If unsuccessful returns:
     #   {'status' => 'FAIL', 'message' => 'message what went wrong'}
+    #
+    # TODO: Move all the optional args to a single hash.
     def post(body, title = '', post_method = 'default', service = '', debug = 0)
       response = get_response('user.post',
                               'body' => body, 'title' => title,
@@ -191,6 +193,8 @@ module Pingfm
     #   {'status' => 'OK'}
     # If unsuccessful returns:
     #   {'status' => 'FAIL', 'message' => 'message what went wrong'}
+    #
+    # TODO: Move all the optional args to a single hash.
     def tpost(body, trigger, title = '', debug = false)
       response = get_response('user.tpost',
                               'body' => body, 'title' => title,
