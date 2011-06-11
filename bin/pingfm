@@ -30,10 +30,15 @@ end
 # Join ARGV just in case the user didn't quote the message.
 message = ARGV.join(' ')
 
-if opts.config?
-  keys = Pingfm::Keyloader.new(opts[:config])
-else
-  keys = Pingfm::Keyloader.new
+begin
+  if opts.config?
+    keys = Pingfm::Keyloader.new(opts[:config])
+  else
+    keys = Pingfm::Keyloader.new
+  end
+rescue Pingfm::KeyloadingError => error
+  STDERR.puts error
+  exit 1
 end
 
 client = Pingfm::Client.new(keys.app_key)

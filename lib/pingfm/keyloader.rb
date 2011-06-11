@@ -5,6 +5,7 @@ module Pingfm
   class KeyloadingError < Exception; end
 
   # Manages the YAML file containing the keys.
+  # TODO: This is kinda dumb and should probably just be Pingfm.config[] or some shit.
   # TODO: Encryption might be nice; might be overkill.
   class Keyloader
 
