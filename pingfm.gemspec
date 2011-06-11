@@ -9,6 +9,8 @@ Gem::Specification.new do |s|
   s.email = ["oshuma@gmail.com", "kevwil@gmail.com"]
   s.homepage = "http://github.com/Oshuma/pingfm"
 
+  s.rubyforge_project = 'pingfm'
+
   s.summary = %q{A Ping.fm Ruby library.}
   s.description = %q{Ping.fm (http://ping.fm) is a simple service that makes updating your social networks a snap, and this it's Ruby library.}
 

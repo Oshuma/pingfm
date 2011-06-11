@@ -5,9 +5,9 @@ describe Pingfm::Keyloader do
 
   before(:each) do
     # TODO: This could be cleaned up a bit.
-    @keydata = {'api_key' => 'foo', 'app_key' => 'bar'}
+    @key_data = {'app_key' => 'bar'}
     @tf = Tempfile.new('keys.yml')
-    ::YAML::dump(@keydata, @tf)
+    ::YAML::dump(@key_data, @tf)
     @tmp_path = @tf.path
     @tf.close
   end
@@ -20,8 +20,7 @@ describe Pingfm::Keyloader do
     loader = Pingfm::Keyloader.new(@tmp_path)
     loader.has_keys?.should be_true
     loader.key_file.should eql(@tmp_path)
-    loader.api_key.should eql(@keydata['api_key'])
-    loader.app_key.should eql(@keydata['app_key'])
+    loader.app_key.should eql(@key_data['app_key'])
   end
 
   it "should save keys to key_file" do
