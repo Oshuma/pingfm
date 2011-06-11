@@ -1,23 +1,22 @@
-require 'spec'
+require 'rspec'
 require "#{File.dirname(__FILE__)}/../lib/pingfm"
 
-# Spec::Runner.configure do |config|
-# end
-
-def init_ok_response(service_type)
-  @service_type = service_type
-  @response = <<EOXML
+# TODO: Replace this XML string bullshit.
+RSpec.configure do |config|
+  def init_ok_response(service_type)
+    @service_type = service_type
+    @response = <<EOXML
 <?xml version="1.0"?>
 <rsp status="OK">
 <transaction>12345</transaction>
 <method>#{@service_type}</method>
 </rsp>
 EOXML
-end
+  end
 
-def init_fail_response(service_type)
-  @service_type = service_type
-  @response = <<EOXML
+  def init_fail_response(service_type)
+    @service_type = service_type
+    @response = <<EOXML
 <?xml version="1.0"?>
 <rsp status="FAIL">
   <transaction>12345</transaction>
@@ -25,11 +24,11 @@ def init_fail_response(service_type)
   <message>You suck</message>
 </rsp>
 EOXML
-end
+  end
 
-def init_service_response
-  @service_type = 'user.services'
-  @response = <<EOXML
+  def init_service_response
+    @service_type = 'user.services'
+    @response = <<EOXML
 <?xml version="1.0"?>
 <rsp status="OK">
   <transaction>12345</transaction>
@@ -50,11 +49,11 @@ def init_service_response
   </services>
 </rsp>
 EOXML
-end
+  end
 
-def init_system_services_response
-  @service_type = 'system.services'
-  @response = <<EOXML
+  def init_system_services_response
+    @service_type = 'system.services'
+    @response = <<EOXML
 <rsp status="OK">
   <transaction>12345</transaction>
   <method>system.services</method>
@@ -72,11 +71,11 @@ def init_system_services_response
   </services>
 </rsp>
 EOXML
-end
+  end
 
-def init_trigger_response
-  @service_type = 'user.triggers'
-  @response = <<EOXML
+  def init_trigger_response
+    @service_type = 'user.triggers'
+    @response = <<EOXML
 <?xml version="1.0"?>
 <rsp status="OK">
   <transaction>12345</transaction>
@@ -95,11 +94,11 @@ def init_trigger_response
   </triggers>
 </rsp>
 EOXML
-end
+  end
 
-def init_latest_response
-  @service_type = 'user.latest'
-  @response = <<EOXML
+  def init_latest_response
+    @service_type = 'user.latest'
+    @response = <<EOXML
   <?xml version="1.0"?>
 <rsp status="OK">
   <transaction>12345</transaction>
@@ -138,6 +137,5 @@ def init_latest_response
   </messages>
 </rsp>
 EOXML
+  end
 end
-
-# EOF
