@@ -54,6 +54,7 @@ EOXML
   def init_system_services_response
     @service_type = 'system.services'
     @response = <<EOXML
+<?xml version="1.0"?>
 <rsp status="OK">
   <transaction>12345</transaction>
   <method>system.services</method>
@@ -99,7 +100,7 @@ EOXML
   def init_latest_response
     @service_type = 'user.latest'
     @response = <<EOXML
-  <?xml version="1.0"?>
+<?xml version="1.0"?>
 <rsp status="OK">
   <transaction>12345</transaction>
   <method>user.latest</method>

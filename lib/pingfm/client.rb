@@ -2,6 +2,7 @@ require 'net/http'
 require 'rexml/document' # TODO: Rewrite this to use something faster (Nokogiri, possibly).
 
 module Pingfm
+  # TODO: The status_ok and status_fail methods need a little thought.
   class Client
 
     # The registered API key for the Ping.fm Ruby library client.
@@ -99,7 +100,7 @@ module Pingfm
     def services
       response = get_response('user.services')
       if response.elements['rsp'].attributes['status'] == 'OK'
-        services = status_ok()
+        services = status_ok
         services['services'] = []
         response.elements.each('rsp/services/service') do |service|
           services['services'].push({'id' => service.attributes['id'],

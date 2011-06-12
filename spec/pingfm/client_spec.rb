@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+# TODO: These specs kinda suck.
+
 describe Pingfm::Client do
   it 'should have an API_URL' do
     Pingfm::Client::API_URL.should_not be_nil

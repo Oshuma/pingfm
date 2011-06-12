@@ -1,3 +1,5 @@
+require 'yaml'
+
 module Pingfm
   class ConfigNotFound < Exception; end
 
