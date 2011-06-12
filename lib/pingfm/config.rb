@@ -10,14 +10,18 @@ module Pingfm
       # Prompts the user for their API key and saves it.
       def ask_for_app_key!
         STDOUT.print 'Enter your Ping.fm User API key (http://ping.fm/key/): '
-        @@config ||= {}
-        @@config['app_key'] = STDIN.gets.chomp
-        save!
+        STDIN.gets.chomp
       end
 
       def [](key)
         setup! unless defined?(@@config)
         @@config[key]
+      end
+
+      def []=(key, value)
+        @@config ||= {}
+        @@config[key] = value
+        save!
       end
 
       def save!

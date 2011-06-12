@@ -4,6 +4,8 @@ require 'rubygems' if RUBY_VERSION =~ /1\.8/
 require 'bundler/setup'
 require 'slop'
 
+require 'pingfm'
+
 opts = Slop.parse!(:help => true) do
   banner "Usage: #{File.basename(__FILE__)} [options] <message>"
 
@@ -35,8 +37,8 @@ message = ARGV.join(' ')
 begin
   app_key = Pingfm::Config['app_key']
 rescue Pingfm::ConfigNotFound => error
-  Pingfm::Config.ask_for_app_key!
-  app_key = Pingfm::Config['app_key']
+  app_key = Pingfm::Config.ask_for_app_key!
+  Pingfm::Config['app_key'] = app_key
 end
 
 client   = Pingfm::Client.new(app_key)

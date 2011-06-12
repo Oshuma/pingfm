@@ -21,6 +21,19 @@
   pingfm.tpost('The message here.', '#something_custom', 'Optional Title')
   # => {'status' => 'OK'}  # if success, otherwise 'FAIL'
 
+You can also manage the configuration file through <tt>Pingfm::Config</tt>.
+
+  # Load from an existing config file (defaults to $HOME/.pingfm.yml).
+  begin
+    app_key = Pingfm::Config['app_key']
+  rescue Pingfm::ConfigNotFound  # This is raised if the config file can't be found.
+    # Helper method to get user app key from STDIN:
+    app_key = Pingfm::Config.ask_for_app_key!
+
+    # Or just assign a value to 'app_key' (this will automatically save the config file):
+    Pingfm::Config['app_key'] = 'YOUR_USER_APP_KEY'
+  end
+
 Check the {documentation}[http://rdoc.info/projects/Oshuma/pingfm] for more details.
 
 == Shell Usage
@@ -29,18 +42,17 @@ Check the {documentation}[http://rdoc.info/projects/Oshuma/pingfm] for more deta
 
 Everything after the '<tt>pingfm</tt>' command is what will be posted to the service.  You
 may also include the message within quotes (ex. using the client within a shell script).
+Run with '<tt>--help</tt>' to list all command-line options.
 
 If your key has not been stored, it will ask for it.  This key will be saved
 in a YAML file in your home directory and you won't be asked for it again.
 
-You can obtain your key here:
-
-* User API Key - {http://ping.fm/key/}[http://ping.fm/key/]
+You can obtain your key here: {http://ping.fm/key/}[http://ping.fm/key/]
 
 
 == Authors
 
-* {Dale Campbell}[http://oshuma.github.com/]
+* {Dale Campbell}[http://nerdno.de/]
 * {Kevin Williams}[http://kevwil.com/]
 * {Krunoslav Husak}[http://h00s.net]
 
