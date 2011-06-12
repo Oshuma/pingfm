@@ -4,5 +4,5 @@ require 'pingfm/client'
 require 'pingfm/config'
 
 module Pingfm
-  VERSION = '2.1.1'
+  VERSION = '2.1.2'
 end

@@ -160,6 +160,22 @@ describe Pingfm::Client, "with expected results" do
     result['status'].should eql('OK')
   end
 
+  it "should get the user app key from the mobile_key" do
+    init_user_key_response
+
+    uri = URI.parse "#{Pingfm::Client::API_URL}/#{@service_type}"
+    @params.merge!('mobile_key' => @mobile_key)
+
+    http_resp = mock('response')
+    http_resp.should_receive(:body).and_return(@response)
+    Net::HTTP.should_receive(:post_form).with(uri, @params).and_return(http_resp)
+
+    result = @client.user_key(@mobile_key)
+    result.should_not be_empty
+    result['status'].should_not be_nil
+    result['app_key'].should == @app_key
+  end
+
 end
 
 describe Pingfm::Client, "with error messages" do

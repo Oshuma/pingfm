@@ -189,6 +189,17 @@ module Pingfm
       end
     end
 
+    # Returns the full user app key from the provided <tt>mobile_key</tt>.
+    def user_key(mobile_key)
+      response = get_response('user.key', 'mobile_key' => mobile_key)
+      if response.elements['rsp'].attributes['status'] == 'OK'
+        app_key = response.elements['rsp'].elements['key'].text
+        status_ok('app_key' => app_key)
+      else
+        status_fail(response)
+      end
+    end
+
     # Validates the API key and user APP key.
     #
     # If successful returns:
@@ -222,8 +233,8 @@ module Pingfm
     end
 
     # Successful response.
-    def status_ok
-      return {'status' => 'OK'}
+    def status_ok(info = {})
+      return {'status' => 'OK'}.merge(info)
     end
 
     # Failed response.

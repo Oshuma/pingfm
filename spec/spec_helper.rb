@@ -139,4 +139,18 @@ EOXML
 </rsp>
 EOXML
   end
+
+  def init_user_key_response
+    @service_type = 'user.key'
+    @app_key      = 'USER_APP_KEY'
+    @mobile_key   = 'MOBILE_KEY'
+    @response = <<EOXML
+<?xml version="1.0"?>
+<rsp status="OK">
+  <transaction>12345</transaction>
+  <method>user.key</method>
+  <key>#{@app_key}</key>
+</rsp>
+EOXML
+  end
 end
