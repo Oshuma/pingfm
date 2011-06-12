@@ -2,8 +2,6 @@ require 'net/http'
 require 'rexml/document' # TODO: Rewrite this to use something faster (Nokogiri, possibly).
 
 module Pingfm
-
-  # Ping.fm Ruby Client
   class Client
 
     # The registered API key for the Ping.fm Ruby library client.
@@ -14,96 +12,10 @@ module Pingfm
     # FIXME: This should be handled better; not so brittle as to break on a trailing slash.
     API_URL = 'http://api.ping.fm/v1'
 
+    attr_reader :user_app_key
+
     def initialize(user_app_key)
       @user_app_key = user_app_key
-    end
-
-    # Validates the API key and user APP key.
-    #
-    # If successful returns:
-    #   {'status' => 'OK'}
-    # If unsuccessful returns:
-    #   {'status' => 'FAIL', 'message' => 'message what went wrong'}
-    def validate
-      response = get_response('user.validate')
-      if response.elements['rsp'].attributes['status'] == 'OK'
-        return status_ok
-      else
-        return status_fail(response)
-      end
-    end
-
-    # Return a complete list of supported services.
-    #
-    # If successful returns:
-    #   {'status' => 'OK', 'services' => [{'id' => 'serviceid', 'name' => 'servicename', 'trigger' => 'servicetrigger', 'url' => 'serviceurl', 'icon' => 'serviceicon'}, ...]}
-    # If unsuccessful returns:
-    #   {'status' => 'FAIL', 'message' => 'message what went wrong'}
-    def system_services
-      response = get_response('system.services')
-      if response.elements['rsp'].attributes['status'] == 'OK'
-        services = status_ok
-        services['services'] = []
-        response.elements.each('rsp/services/service') do |service|
-          services['services'].push({'id'      => service.attributes['id'],
-                                     'name'    => service.attributes['name'],
-                                     'trigger' => service.elements['trigger'].text,
-                                     'url'     => service.elements['url'].text,
-                                     'icon'    => service.elements['icon'].text})
-        end
-        return services
-      else
-        return status_fail(response)
-      end
-    end
-
-    # Returns a list of services the user has set up through Ping.fm.
-    #
-    # If successful returns:
-    #   {'status' => 'OK', 'services' => [{'id' => 'serviceid', 'name' => 'servicename', 'trigger' => 'servicetrigger', 'url' => 'serviceurl', 'icon' => 'serviceicon', 'methods' => 'status,blog'}, ...]}
-    # If unsuccessful returns:
-    #   {'status' => 'FAIL', 'message' => 'message what went wrong'}
-    def services
-      response = get_response('user.services')
-      if response.elements['rsp'].attributes['status'] == 'OK'
-        services = status_ok()
-        services['services'] = []
-        response.elements.each('rsp/services/service') do |service|
-          services['services'].push({'id' => service.attributes['id'],
-                        'name' => service.attributes['name'],
-                        'trigger' => service.elements['trigger'].text,
-                        'url' => service.elements['url'].text,
-                        'icon' => service.elements['icon'].text,
-                        'methods' => service.elements['methods'].text})
-        end
-        return services
-      else
-        return status_fail(response)
-      end
-    end
-
-    # Returns a user's custom triggers.
-    #
-    # If successful returns:
-    #   {'status' => 'OK', 'triggers' => [{'id' => 'triggerid', 'method' => 'triggermethod', 'services' => [{'id' => 'serviceid', 'name' => 'servicename'}, ...]}, ...]}
-    # If unsuccessful returns:
-    #   {'status' => 'FAIL', 'message' => 'message what went wrong'}
-    def triggers
-      response = get_response('user.triggers')
-      if response.elements['rsp'].attributes['status'] == 'OK'
-        triggers = status_ok
-        triggers['triggers'] = []
-        response.elements.each('rsp/triggers/trigger') do |trigger|
-          triggers['triggers'].push({'id' => trigger.attributes['id'], 'method' => trigger.attributes['method'], 'services' => []})
-
-          trigger.elements.each('services/service') do |service|
-            triggers['triggers'].last['services'].push({'id' => service.attributes['id'], 'name' => service.attributes['name']})
-          end
-        end
-        return triggers
-      else
-        return status_fail(response)
-      end
     end
 
     # Returns the last <tt>limit</tt> messages a user has posted through Ping.fm.
@@ -155,7 +67,7 @@ module Pingfm
     # Arguments:
     # [body] Message body.
     #
-    # Optional arguments:
+    # Optional <tt>args</tt>:
     # [title] Title of the posted message; title is required for 'blog' post method.
     # [post_method] Posting method; either 'default', 'blog', 'microblog' or 'status'.
     # [service] A single service to post to.
@@ -165,15 +77,63 @@ module Pingfm
     #   {'status' => 'OK'}
     # If unsuccessful returns:
     #   {'status' => 'FAIL', 'message' => 'message what went wrong'}
-    #
-    # TODO: Move all the optional args to a single hash.
-    def post(body, title = '', post_method = 'default', service = '', debug = 0)
+    def post(body, opts = { :title => '', :post_method => 'default', :service => '', :debug => false })
       response = get_response('user.post',
-                              'body' => body, 'title' => title,
-                              'post_method' => post_method, 'service' => service,
-                              'debug' => debug)
+                              'body' => body, 'title' => opts[:title],
+                              'post_method' => opts[:post_method], 'service' => opts[:service],
+                              'debug' => (opts[:debug] ? 1 : 0))
+
       if response.elements['rsp'].attributes['status'] == 'OK'
         return status_ok
+      else
+        return status_fail(response)
+      end
+    end
+
+    # Returns a list of services the user has set up through Ping.fm.
+    #
+    # If successful returns:
+    #   {'status' => 'OK', 'services' => [{'id' => 'serviceid', 'name' => 'servicename', 'trigger' => 'servicetrigger', 'url' => 'serviceurl', 'icon' => 'serviceicon', 'methods' => 'status,blog'}, ...]}
+    # If unsuccessful returns:
+    #   {'status' => 'FAIL', 'message' => 'message what went wrong'}
+    def services
+      response = get_response('user.services')
+      if response.elements['rsp'].attributes['status'] == 'OK'
+        services = status_ok()
+        services['services'] = []
+        response.elements.each('rsp/services/service') do |service|
+          services['services'].push({'id' => service.attributes['id'],
+                        'name' => service.attributes['name'],
+                        'trigger' => service.elements['trigger'].text,
+                        'url' => service.elements['url'].text,
+                        'icon' => service.elements['icon'].text,
+                        'methods' => service.elements['methods'].text})
+        end
+        return services
+      else
+        return status_fail(response)
+      end
+    end
+
+    # Return a complete list of supported services.
+    #
+    # If successful returns:
+    #   {'status' => 'OK', 'services' => [{'id' => 'serviceid', 'name' => 'servicename', 'trigger' => 'servicetrigger', 'url' => 'serviceurl', 'icon' => 'serviceicon'}, ...]}
+    # If unsuccessful returns:
+    #   {'status' => 'FAIL', 'message' => 'message what went wrong'}
+    def system_services
+      response = get_response('system.services')
+      if response.elements['rsp'].attributes['status'] == 'OK'
+        services = status_ok
+        services['services'] = []
+        response.elements.each('rsp/services/service') do |service|
+          services['services'].push({'id'      => service.attributes['id'],
+                                     'name'    => service.attributes['name'],
+                                     'trigger' => service.elements['trigger'].text,
+                                     'url'     => service.elements['url'].text,
+                                     'icon'    => service.elements['icon'].text})
+        end
+        return services
       else
         return status_fail(response)
       end
@@ -193,12 +153,49 @@ module Pingfm
     #   {'status' => 'OK'}
     # If unsuccessful returns:
     #   {'status' => 'FAIL', 'message' => 'message what went wrong'}
-    #
-    # TODO: Move all the optional args to a single hash.
-    def tpost(body, trigger, title = '', debug = false)
+    def tpost(body, trigger, opts = { :title => '', :debug => false })
       response = get_response('user.tpost',
-                              'body' => body, 'title' => title,
-                              'trigger' => trigger, 'debug' => (debug ? 1 : 0))
+                              'body' => body, 'title' => opts[:title],
+                              'trigger' => trigger, 'debug' => (opts[:debug] ? 1 : 0))
+      if response.elements['rsp'].attributes['status'] == 'OK'
+        return status_ok
+      else
+        return status_fail(response)
+      end
+    end
+
+    # Returns a user's custom triggers.
+    #
+    # If successful returns:
+    #   {'status' => 'OK', 'triggers' => [{'id' => 'triggerid', 'method' => 'triggermethod', 'services' => [{'id' => 'serviceid', 'name' => 'servicename'}, ...]}, ...]}
+    # If unsuccessful returns:
+    #   {'status' => 'FAIL', 'message' => 'message what went wrong'}
+    def triggers
+      response = get_response('user.triggers')
+      if response.elements['rsp'].attributes['status'] == 'OK'
+        triggers = status_ok
+        triggers['triggers'] = []
+        response.elements.each('rsp/triggers/trigger') do |trigger|
+          triggers['triggers'].push({'id' => trigger.attributes['id'], 'method' => trigger.attributes['method'], 'services' => []})
+
+          trigger.elements.each('services/service') do |service|
+            triggers['triggers'].last['services'].push({'id' => service.attributes['id'], 'name' => service.attributes['name']})
+          end
+        end
+        return triggers
+      else
+        return status_fail(response)
+      end
+    end
+
+    # Validates the API key and user APP key.
+    #
+    # If successful returns:
+    #   {'status' => 'OK'}
+    # If unsuccessful returns:
+    #   {'status' => 'FAIL', 'message' => 'message what went wrong'}
+    def validate
+      response = get_response('user.validate')
       if response.elements['rsp'].attributes['status'] == 'OK'
         return status_ok
       else
@@ -240,5 +237,4 @@ module Pingfm
     end
 
   end
-
 end

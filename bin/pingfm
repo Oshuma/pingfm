@@ -11,7 +11,9 @@ opts = Slop.parse!(:help => true) do
 
   on :debug, 'Enable debugging'
 
-  on :m, :message, 'Body of the post'
+  # TODO: Implement this.
+  on :l, :latest, 'List your latest <count> posts', :optional => false
+
   on :t, :title,   'Title of the post'
 
   on :version, 'Print the version' do
@@ -31,61 +33,17 @@ end
 message = ARGV.join(' ')
 
 begin
-  if opts.config?
-    keys = Pingfm::Keyloader.new(opts[:config])
-  else
-    keys = Pingfm::Keyloader.new
-  end
-rescue Pingfm::KeyloadingError => error
-  STDERR.puts error
-  exit 1
+  app_key = Pingfm::Config['app_key']
+rescue Pingfm::ConfigNotFound => error
+  Pingfm::Config.ask_for_app_key!
+  app_key = Pingfm::Config['app_key']
 end
 
-client = Pingfm::Client.new(keys.app_key)
+client   = Pingfm::Client.new(app_key)
+response = client.post(message)
 
-STDOUT.puts "-- DEBUG: opts: #{opts.to_hash.inspect}"
-STDOUT.puts "-- DEBUG: ARGV: #{ARGV.inspect}"
-STDOUT.puts "-- DEBUG: message: #{message.inspect}"
-STDOUT.puts "-- DEBUG: keys: #{keys.inspect}"
-STDOUT.puts "-- DEBUG: client: #{client.inspect}"
-
-return 0 # DEBUG
-
-# TODO: Rewrite this POS.
-puts "The 'pingfm' binary will be rewritten as soon as the library is."
-exit
-
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'pingfm'))
-
-keyloader = ::Pingfm::Keyloader.new
-unless keyloader.has_keys?
-  keyloader.api_key = API_KEY
-  print 'Enter your Ping.fm User API key (http://ping.fm/key/): '
-  keyloader.app_key = STDIN.gets.chomp
-  keyloader.save
-end
-
-# post message from ARGV
-
-pingfm = ::Pingfm::Client.new(keyloader.api_key, keyloader.app_key)
-
-s = pingfm.validate
-if s['status'] == 'OK'
-  status = ARGV.join(' ')
-
-  # Might be a good idea to throw an exception here, instead of just bailing.
-  if status.nil? || status.empty?
-    puts 'Must provide a message to send.'
-    exit
-  end
-
-  post_result = pingfm.post(status)
-
-  if post_result['status'] == 'FAIL'
-    puts post_result['message']
-  else
-    puts 'Message sent.'
-  end
+if response['OK']
+  STDOUT.puts 'Message sent.'
 else
-  puts s['message']
+  STDERR.puts response['message']
 end
