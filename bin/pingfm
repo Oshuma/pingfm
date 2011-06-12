@@ -41,7 +41,10 @@ rescue Pingfm::ConfigNotFound => error
   Pingfm::Config['app_key'] = app_key
 end
 
-client   = Pingfm::Client.new(app_key)
+options = {
+  :debug => opts.debug?,
+}
+client   = Pingfm::Client.new(app_key, options)
 response = client.post(message)
 
 if response['status'] == 'OK'

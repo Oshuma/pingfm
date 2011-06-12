@@ -1,3 +1,4 @@
+require 'base64'
 require 'net/http'
 require 'rexml/document' # TODO: Rewrite this to use something faster (Nokogiri, possibly).
 
@@ -14,9 +15,19 @@ module Pingfm
     API_URL = 'http://api.ping.fm/v1'
 
     attr_reader :user_app_key
+    attr_reader :options
 
-    def initialize(user_app_key)
+    # You can pass an <tt>options</tt> hash:
+    # [debug] Boolean used when testing to avoid actually posting a message.
+    # [decode_body] If <tt>true</tt>, the 'body' of appropriate elements will be Base64 decoded; default is <tt>false</tt>.
+    def initialize(user_app_key, options = {})
       @user_app_key = user_app_key
+      @options = {
+        # Defaults:
+        :debug => false,
+        :decode_body => false,
+      }.merge(options)
+      STDOUT.puts "-- DEBUG: options: #{@options.inspect}"
     end
 
     # Returns the last <tt>limit</tt> messages a user has posted through Ping.fm.
@@ -51,7 +62,8 @@ module Pingfm
           else
             latest['messages'].last['location'] = ''
           end
-          latest['messages'].last['body'] = message.elements['*/body'].text
+          encoded_body = message.elements['*/body'].text
+          latest['messages'].last['body'] = @options[:decode_body] ? Base64.decode64(encoded_body) : encoded_body
           latest['messages'].last['services'] = []
           message.elements.each('services/service') do |service|
             latest['messages'].last['services'].push({'id' => service.attributes['id'], 'name' => service.attributes['name']})
@@ -99,21 +111,20 @@ module Pingfm
     # Arguments:
     # [body] Message body.
     #
-    # Optional <tt>args</tt>:
+    # Optional <tt>opts</tt>:
     # [title] Title of the posted message; title is required for 'blog' post method.
     # [post_method] Posting method; either 'default', 'blog', 'microblog' or 'status'.
     # [service] A single service to post to.
-    # [debug] Set debug to 1 to avoid posting test data.
     #
     # If successful returns:
     #   {'status' => 'OK'}
     # If unsuccessful returns:
     #   {'status' => 'FAIL', 'message' => 'message what went wrong'}
-    def post(body, opts = { :title => '', :post_method => 'default', :service => '', :debug => false })
+    def post(body, opts = { :title => '', :post_method => 'default', :service => '' })
       response = get_response('user.post',
                               'body' => body, 'title' => opts[:title],
                               'post_method' => opts[:post_method], 'service' => opts[:service],
-                              'debug' => (opts[:debug] ? 1 : 0))
+                              'debug' => (@options[:debug] ? 1 : 0))
 
       if response.elements['rsp'].attributes['status'] == 'OK'
         return status_ok
@@ -177,18 +188,17 @@ module Pingfm
     # [body] Message body.
     # [trigger] Custom trigger the user has defined from the Ping.fm website.
     #
-    # Optional arguments:
+    # Optional <tt>opts</tt>:
     # [title] Title of the posted message; title is required for 'blog' post method.
-    # [debug] Set debug to +true+ to avoid posting test data.
     #
     # If successful returns:
     #   {'status' => 'OK'}
     # If unsuccessful returns:
     #   {'status' => 'FAIL', 'message' => 'message what went wrong'}
-    def tpost(body, trigger, opts = { :title => '', :debug => false })
+    def tpost(body, trigger, opts = { :title => '' })
       response = get_response('user.tpost',
                               'body' => body, 'title' => opts[:title],
-                              'trigger' => trigger, 'debug' => (opts[:debug] ? 1 : 0))
+                              'trigger' => trigger, 'debug' => (@options[:debug] ? 1 : 0))
       if response.elements['rsp'].attributes['status'] == 'OK'
         return status_ok
       else
