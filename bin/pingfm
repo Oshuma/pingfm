@@ -7,14 +7,14 @@ require 'slop'
 opts = Slop.parse!(:help => true) do
   banner "Usage: #{File.basename(__FILE__)} [options] <message>"
 
-  on :c, :config, 'Use the specified (YAML) config file', :optional => false
+  on :debug, 'Enable debugging' do
+    $DEBUG = true
+  end
 
-  on :debug, 'Enable debugging'
-
-  # TODO: Implement this.
-  on :l, :latest, 'List your latest <count> posts', :optional => false
-
-  on :t, :title,   'Title of the post'
+  # TODO: Implement these.
+  # on :c, :config, 'Use the specified (YAML) config file', :optional => false
+  # on :l, :latest, 'List your latest <count> posts', :optional => false
+  # on :t, :title,   'Title of the post'
 
   on :version, 'Print the version' do
     STDOUT.puts "Ping.fm v#{Pingfm::VERSION}"
@@ -42,7 +42,7 @@ end
 client   = Pingfm::Client.new(app_key)
 response = client.post(message)
 
-if response['OK']
+if response['status'] == 'OK'
   STDOUT.puts 'Message sent.'
 else
   STDERR.puts response['message']
