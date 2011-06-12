@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    pingfm (2.0.0)
+    pingfm (2.1.2)
       slop
 
 GEM

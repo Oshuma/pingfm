@@ -140,6 +140,29 @@ EOXML
 EOXML
   end
 
+  def init_user_links_response
+    @service_type = 'user.links'
+    @response = <<EOXML
+<?xml version="1.0"?>
+<rsp status="OK">
+  <transaction>12345</transaction>
+  <method>user.links</method>
+  <links>
+    <link>
+      <date rfc="Mon, 14 Sep 2009 01:53:12 -0500" unix="1252911192" />
+      <short>http://ping.fm/1souk</short>
+      <long>http://www.techcrunch.com/2009/09/13/intuit-to-acquire-former-techcrunch50-winner-mint-for-170-million/</long>
+    </link>
+    <link>
+      <date rfc="Mon, 14 Sep 2009 00:26:10 -0500" unix="1252905970" />
+      <short>http://ping.fm/U5azR</short>
+      <long>http://www.wired.com/wiredscience/2009/09/gallery_dinoauction/</long>
+    </link>
+  </links>
+</rsp>
+EOXML
+  end
+
   def init_user_key_response
     @service_type = 'user.key'
     @app_key      = 'USER_APP_KEY'

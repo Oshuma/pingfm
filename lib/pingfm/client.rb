@@ -23,7 +23,7 @@ module Pingfm
     #
     # Optional arguments:
     # [limit] Limit the results returned; default is 25.
-    # [order] = Which direction to order the returned results by date; default is descending.
+    # [order] Which direction to order the returned results by date; default is 'DESC'.
     #
     # If successful returns:
     #   {'status' => 'OK', 'messages' => [{'id' => 'messageid', 'method' => 'messsagemethod', 'rfc' => 'date', 'unix' => 'date', 'title' => 'messagetitle', 'body' => 'messagebody', 'services' => [{'id' => 'serviceid', 'name' => 'servicename'}, ...]}, ...]}
@@ -61,6 +61,37 @@ module Pingfm
       else
         return status_fail(response)
       end
+    end
+
+    # Returns the last +limit+ number of links the user has shortened and posted through Ping.fm.
+    #
+    # Optional arguments:
+    # [limit] Limit the results returned; default is 25.
+    # [order] The sort order of the results; default is 'DESC'.
+    #
+    # If successful returns:
+    #   {'status' => 'OK', 'links' => [{ 'short' => 'http://ping.fm/}, ...]}
+    def links(limit = 25, order = 'DESC')
+      response = get_response('user.links', 'limit' => limit, 'order' => order)
+      if response.elements['rsp'].attributes['status'] == 'OK'
+        links = []
+        response.elements.each('rsp/links/link') do |link|
+          links << {
+            'date'  => link.elements['date'].attributes['rfc'],
+            'short' => link.elements['short'].text,
+            'long'  => link.elements['long'].text,
+          }
+        end
+        status_ok('links' => links)
+      else
+        status_fail(response)
+      end
+    end
+
+    def url_create
+    end
+
+    def url_resolve
     end
 
     # Posts a message to the user's Ping.fm services.
@@ -239,7 +270,7 @@ module Pingfm
 
     # Failed response.
     def status_fail(response)
-      if response.elements.include? 'rsp/message'
+      if response.elements.include?('rsp/message')
         message = response.elements['rsp/message'].text
       else
         message = "Unknown error from Ping.fm."
