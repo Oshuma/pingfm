@@ -27,7 +27,6 @@ module Pingfm
         :debug => false,
         :decode_body => false,
       }.merge(options)
-      STDOUT.puts "-- DEBUG: options: #{@options.inspect}"
     end
 
     # Returns the last <tt>limit</tt> messages a user has posted through Ping.fm.

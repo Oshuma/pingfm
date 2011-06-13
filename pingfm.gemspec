@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
   s.summary = %q{A Ping.fm Ruby library.}
   s.description = %q{Ping.fm (http://ping.fm) is a simple service that makes updating your social networks a snap, and this it's Ruby library.}
 
+  s.add_dependency('bundler')
   s.add_dependency('slop')
   s.add_development_dependency('rspec', '>= 2.6.0')
 

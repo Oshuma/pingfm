@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     pingfm (2.1.2)
+      bundler
       slop
 
 GEM
