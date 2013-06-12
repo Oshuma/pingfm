@@ -12,7 +12,7 @@ module Pingfm
     # MUST NOT end with a trailing slash, as this string is interpolated like this:
     # "#{API_URL}/user.services"
     # FIXME: This should be handled better; not so brittle as to break on a trailing slash.
-    API_URL = 'http://api.ping.fm/v1'
+    API_URL = 'http://papi.cmp.sr/v1'
 
     attr_reader :user_app_key
     attr_reader :options
