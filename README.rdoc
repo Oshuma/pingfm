@@ -1,5 +1,7 @@
 = Ping.fm Ruby Library
 
+Note: Ping.fm is dead, Composer.io hosts a drop in replacement for the API which this library now uses.
+
 == Library Usage
 
   # Require the library and initialize it.
